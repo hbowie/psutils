@@ -1545,6 +1545,51 @@ public class StringUtils {
   }
   
   /**
+   Converts a string to a human readable file name, allowing mixed-case 
+   and spaces and dashes, removing any odd characters.
+  
+   @param in The string to be converted to a file name. 
+  
+   @return The resulting file name. 
+  */
+  public static String makeReadableFileName (String in) {
+    // System.out.println ("makeFileName");
+    // System.out.println ("  in = " + in);
+    StringBuilder out = new StringBuilder();
+    char c;
+    int ci;
+    for (int i = 0; i < in.length(); i++) {
+      c = in.charAt (i);
+      ci = c;
+      // System.out.println ("  c = " + c + " (" + 
+      //     String.valueOf (ci) + ")");
+      if (ci > 127) {
+        // ignore funny characters
+      }
+      else
+      if (Character.isLetter (c)) {
+        out.append (Character.toLowerCase (c));
+      }
+      else
+      if (Character.isDigit (c)) {
+        out.append (c);
+      } 
+      else
+      if (c == ' ' || c == '_' || c == '-') {
+        out.append (c);
+      } else {
+        out.append (FILE_NAME_WORD_SEPARATOR);
+      }
+    } // end for each character in input string
+    if (out.length() > 0) {
+      if (out.charAt (out.length() - 1) == FILE_NAME_WORD_SEPARATOR) {
+        out.deleteCharAt (out.length() - 1);
+      }
+    }
+    return out.toString();
+  }
+  
+  /**
     Prints the passed String to the passed PrintStream, making Line Feed
     and Carriage Return characters visible.
     

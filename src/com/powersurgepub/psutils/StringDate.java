@@ -32,6 +32,7 @@ public class StringDate {
   
   private    boolean          future = false;
   public     static final String FUTURE = "future";
+  public     static final String NEXT_YEAR = "next year";
   private    Calendar         today = Calendar.getInstance();
   private    int              currentYear;
   private    int              currentMonth;
@@ -125,11 +126,17 @@ public class StringDate {
                     adjust the year to be a future year. 
   */
   public void setFuture(String futureStr) {
-    if (futureStr.toLowerCase().indexOf(FUTURE) >= 0) {
+    String futureLower = futureStr.toLowerCase();
+    if (futureLower.indexOf(FUTURE) >= 0) {
       setFuture(true);
-    } else {
-      setFuture(false);
     }
+    else
+    if (futureLower.indexOf(NEXT_YEAR) >= 0) {
+      setFuture(true);
+    } 
+    else {
+      setFuture(false);
+    } 
   }
   
   /**
