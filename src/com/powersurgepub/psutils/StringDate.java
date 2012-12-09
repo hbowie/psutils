@@ -81,14 +81,20 @@ public class StringDate {
     while (i < years.length()) {
       char c = years.charAt(i);
       if (Character.isDigit(c)) {
-        if (yearCount == 0) {
+        if (yearCount == 0 && year1.length() < 4) {
           year1.append(c);
-        } else {
+        } 
+        else 
+        if (yearCount == 1 && year2.length() < 4) {
           year2.append(c);
         }
       } 
       else
       if (year1.length() > 0 && yearCount == 0) {
+        yearCount++;
+      }
+      else
+      if (year2.length() > 0 && yearCount == 1) {
         yearCount++;
       }
       i++;
