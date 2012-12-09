@@ -1568,7 +1568,7 @@ public class StringUtils {
       }
       else
       if (Character.isLetter (c)) {
-        out.append (Character.toLowerCase (c));
+        out.append (c);
       }
       else
       if (Character.isDigit (c)) {
@@ -1577,7 +1577,12 @@ public class StringUtils {
       else
       if (c == ' ' || c == '_' || c == '-') {
         out.append (c);
-      } else {
+      } 
+      else
+      if (out.length() > 0) {
+        if (out.charAt(out.length() - 1) != ' ') {
+          out.append (' ');
+        }
         out.append (FILE_NAME_WORD_SEPARATOR);
       }
     } // end for each character in input string
