@@ -18,6 +18,10 @@ public class ResourceList {
   private JComboBox comboBox = null;
   private List list = null;
   
+  public ResourceList (JComboBox comboBox) {
+    this.comboBox = comboBox;
+  }
+  
   /**
   
    Identify a list of items from a text file containing one item per line. 
@@ -130,6 +134,14 @@ public class ResourceList {
     this.comboBox = comboBox;
     this.list = null;
     return load();
+  }
+  
+  /** 
+   Sets a JComboBox and its items as the list to be maintained. 
+   */
+  public void setComboBox (JComboBox comboBox) {
+    this.comboBox = comboBox;
+    this.list = null;
   }
   
   /**

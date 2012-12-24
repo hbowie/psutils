@@ -103,10 +103,16 @@ public class WindowMenuManager {
   public void locateUpperLeftAndMakeVisible 
       (Component refComponent, JFrame window) {
     
+    locateUpperLeft(refComponent, window);
+    makeVisible (window);
+  }
+  
+  public void locateUpperLeft 
+      (Component refComponent, JFrame window) {
+    
     window.setLocation (
 			refComponent.getX() + CHILD_WINDOW_X_OFFSET, 
 			refComponent.getY() + CHILD_WINDOW_Y_OFFSET);
-    makeVisible (window);
   }
   
   public void locateCenterAndMakeVisible
