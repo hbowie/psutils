@@ -371,6 +371,16 @@ public class Home {
   }
   
   /**
+   Return the app folder location as a URL.
+  
+   @return The App folder location as a URL, or null, if the conversion to a
+           URL failed for some reason. 
+  */
+  public URL getPageURL () {
+    return pageURL;
+  }
+  
+  /**
     Return the folder containing user prefs for this application.
     
     @return Folder containing user prefs for this application.
