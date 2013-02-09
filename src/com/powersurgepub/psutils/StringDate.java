@@ -396,6 +396,35 @@ public class StringDate {
   */
   public String getShort() {
 
+    Calendar cal = getCalendar();
+    
+    if (cal != null) {
+      return shortFormat.format(cal.getTime());
+    } else {
+      StringBuilder shortDate = new StringBuilder();
+      try {
+        int month = Integer.parseInt(mm);
+        if (month >= 1 && month <= 12) {
+          shortDate.append(MONTH_NAMES[month - 1].substring(0, 3));
+          shortDate.append(" ");
+          shortDate.append(dd);
+          return shortDate.toString();
+        } else {
+          return "";
+        }
+      } catch (NumberFormatException e) {
+        return "";
+      }
+    }
+  }
+  
+  /**
+   Return the date as a Calendar object, if we have a complete good date. 
+  
+   @return A Calendar object, or null if we don't have a complete good date. 
+  */
+  public Calendar getCalendar() {
+
     Calendar cal = Calendar.getInstance();
     int goodDateParts = 0;
     
@@ -427,22 +456,9 @@ public class StringDate {
     }
     
     if (goodDateParts >= 3) {
-      return shortFormat.format(cal.getTime());
+      return cal;
     } else {
-      StringBuilder shortDate = new StringBuilder();
-      try {
-        int month = Integer.parseInt(mm);
-        if (month >= 1 && month <= 12) {
-          shortDate.append(MONTH_NAMES[month - 1].substring(0, 3));
-          shortDate.append(" ");
-          shortDate.append(dd);
-          return shortDate.toString();
-        } else {
-          return "";
-        }
-      } catch (NumberFormatException e) {
-        return "";
-      }
+      return null;
     }
   }
 
