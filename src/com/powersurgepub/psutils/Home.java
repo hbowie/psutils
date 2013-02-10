@@ -41,6 +41,7 @@ public class Home {
   private String              programNameLower = "";
   private String              programNameNoSpace = "";
   private String              programVersion = "";
+  private String              copyrightYearFrom = "1999";
   private File                appFolder;
   private File                prefsFolder;
   private File                userHome = null;
@@ -502,6 +503,24 @@ public class Home {
    */
   public void setProgramVersion (String programVersion) {
     this.programVersion = programVersion;
+  }
+  
+  /**
+   Set the first year this work was copyrighted. 
+  
+   @param copyrightYearFrom The first year that this program was copyrighted. 
+  */
+  public void setCopyrightYearFrom (String copyrightYearFrom) {
+    this.copyrightYearFrom = copyrightYearFrom;
+  }
+  
+  /**
+   Get the first year that this work was copyrighted. 
+  
+   @return The first year that this work was copyrighted. 
+  */
+  public String getCopyrightYearFrom () {
+    return copyrightYearFrom;
   }
   
   /**
