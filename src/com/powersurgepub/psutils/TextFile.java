@@ -1,3 +1,19 @@
+/*
+ * Copyright 1999 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import com.powersurgepub.psutils.*;
@@ -9,33 +25,7 @@ import com.powersurgepub.xos2.XOS;
 
 /**
    A text file that can be opened for input or output, read from
-   or written to, and closed. <p>
-    
-   This code is copyright (c) 1999-2000 by Herb Bowie of PowerSurge Publishing. 
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-     2003/05/25 - Modified readLine method to avoid re-opening the file
-                  automatically if the end of the file has already been
-                  reached. <li>
-  	 2003/04/01 - Modified constructor that accepts a File object to use
-                  the getPath() method rather than the getAbsolutePath() method. <li>
-     2002/10/12 - Added Debug instance and setDebug method. <li>
-     2002/08/14 - Added getFilePathAndName method. <li>
-     2000/11/15 - Added getFileName method, and constructor that accepts
-                  a URL as input. <li>
-     2000/04/17 - Modified to be consistent with "The Elements of Java Style". <li>
-     1998/08/16 - Added constructor to allow file to be defined by a single File object,
-     for use with template package. </ul>
-  
-   @author Herb Bowie (<a href="mailto:herb@powersurgepub.com">
-           herb@powersurgepub.com</a>)<br>
-           of PowerSurge Publishing (<A href="http://www.powersurgepub.com/software/">
-           www.powersurgepub.com/software</a>)
-  
-   @version 
-  	 2004/07/12 - Added write method to write text to the output file without 
-                  a new line character.
+   or written to, and closed. 
  */
 public class TextFile extends File {
   

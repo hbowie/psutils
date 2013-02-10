@@ -1,3 +1,19 @@
+/*
+ * Copyright 1999 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import java.io.File;
@@ -5,27 +21,7 @@ package com.powersurgepub.psutils;
            
 /**
    A file name with some methods that allow it to be
-   manipulated in various useful ways. <p>
-     
-   This code is copyright (c) 1999-2002 by Herb Bowie of PowerSurge Publishing. 
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-     2002/12/17 - added several methods to access individual directories
-                  in the path. <li>
-     2002/11/08 - added a constructor that accepts a File object. <li>
-     2002/08/14 - Added a field and get method for the path information. <li>
- *	 2000/04/07 - Modified to be consistent with "The Elements of Java Style". <li>
-     2000/03/30 - Modified to make use of StringScanner. <li>
-     2000/03/27 - Cleaned up code and documentation. </ul>
-  
-   @author Herb Bowie (<a href="mailto:herb@powersurgepub.com">
-           herb@powersurgepub.com</a>)<br>
-           of PowerSurge Publishing (<A href="http://www.powersurgepub.com">
-           www.powersurgepub.com</a>)
-  
-   @version 2003/01/27 - Corrected calculation of number of folders when path
-                         begins with a separator ('/').
+   manipulated in various useful ways. 
  */
 public class FileName {
   

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2003 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import java.io.*;
@@ -14,21 +30,7 @@ package com.powersurgepub.psutils;
    A common use for UserPrefs is to store registration information for a product:
    a user name and registration code. The RegistrationCode class has special
    features that can attempt to synchronize changes between a RegistrationCode object
-   and a UserPrefs object. <p>
-     
-   This code is copyright (c) 2003-2010 by Herb Bowie of PowerSurge Publishing.
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-      2003/10/11 - Created this class for use with Two Due.
-    </ul>
-   @author Herb Bowie 
-             (<a href="mailto:herb@powersurgepub.com">herb@powersurgepub.com</a>)<br>
-           of PowerSurge Publishing 
-             (<A href="http://www.powersurgepub.com/">www.powersurgepub.com/</a>)
-  
-   @version 
-      2004/06/10 - Updated to use Preferences API.
+   and a UserPrefs object. 
  */
 public class UserPrefs {
   

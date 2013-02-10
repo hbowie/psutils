@@ -1,3 +1,19 @@
+/*
+ * Copyright 1999 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import java.util.*;
@@ -5,17 +21,6 @@ package com.powersurgepub.psutils;
 /**
    A utility class containing methods to assist with 
    debugging. <p>
-     
-   This code is copyright (c) 1999-2000 by Herb Bowie of PowerSurge Publishing. 
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-      2000/11/17 - Added code to display "NULL" for null object. <LI>
-      2000/05/23 - Created new class.
-    </ul>
-   @author Herb Bowie (<a href="mailto:herb@powersurgepub.com">herb@powersurgepub.com</a>)<br>
-    <br>  of PowerSurge Publishing (<A href="http://www.powersurgepub.com/software/">www.powersurgepub.com/software</a>)
-   @version 2000/11/18 - Added field to turn displays on or off.
  */
 public class Debug {
 

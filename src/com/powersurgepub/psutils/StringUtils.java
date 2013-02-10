@@ -1,3 +1,19 @@
+/*
+ * Copyright 1999 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import java.awt.*;
@@ -6,33 +22,7 @@ package com.powersurgepub.psutils;
   
 /**
    A utility class containing static methods to do things
-   with strings. <p>
-     
-   This code is copyright (c) 1999-2004 by Herb Bowie of PowerSurge Publishing. 
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-     2004/06/01 - Modified purify method to eliminate double quotes in addition
-                  to tabs, etc. <li>
-     2004/02/25 - Added an IndexOfIgnoreCase method to find a substring within
-                  a String, ignoring case. <li>
-     2003/12/18 - Added a wordDemarcation method to modify the way word 
-                  beginnings are indicated within a String. <li>
-     2003/12/07 - Added a purify method to remove carriage returns, line feeds
-                  and tabs from a string. <li>
-     2003/02/12 - Added an almostEqual method to see if two strings are 
-                  approximately equal. <li>
-     2003/02/12 - Added a replaceChars method that will replace one or more 
-                  characters in a string with any other characters. <li>
-     2000/04/04 - Applied standards according to "The Elements of Java Style". <li>
-     2000/03/26 - Cleaned up code and documentation.
-    </ul>
-   @author Herb Bowie 
-      (<a href="mailto:herb@powersurgepub.com">herb@powersurgepub.com</a>)<br>
-    <br>  of PowerSurge Publishing 
-      (<a href="http://www.powersurgepub.com">www.powersurgepub.com</a>)
-   @version 
-     2004/07/02 - Added encodeHTML and decodeHTML methods.  
+   with strings. 
  */
 public class StringUtils {
 

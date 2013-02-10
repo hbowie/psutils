@@ -1,3 +1,19 @@
+/*
+ * Copyright 1999 - 2013 Herb Bowie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.powersurgepub.psutils;
 
   import com.powersurgepub.psutils.LogData;
@@ -18,31 +34,7 @@ package com.powersurgepub.psutils;
   
    This class should be passed events and data. Significant events will
    be written to the log. Data will be written when it is related to an event
-   (or optionally all data can be written). <p>
-    
-   This code is copyright (c) 1999-2000 by Herb Bowie of PowerSurge Publishing. 
-   All rights reserved. <p>
-   
-   Version History: <ul><li>
-     2004/06/01 - Added methods to get logThreshold and get logAllData. <li>
-     2000/04/18 - Added check for event's data relationship. <li>
-     2000/04/12 - Modified to be consistent with "The Elements of Java Style". </ul>
-  
-   @see com.powersurgepub.psutils.LogOutput 
-   @see com.powersurgepub.psutils.LogOutputNone
-   @see com.powersurgepub.psutils.LogOutputDisk
-   @see com.powersurgepub.psutils.LogData
-   @see com.powersurgepub.psutils.LogEvent
-   @see com.powersurgepub.psutils.LogJuggler
-  
-   @author Herb Bowie (<a href="mailto:herb@powersurgepub.com">
-           herb@powersurgepub.com</a>)<br>
-           of PowerSurge Publishing (<A href="http://www.powersurgepub.com/software/">
-           www.powersurgepub.com/software</a>)
-  
-   @version 
-   	2004/07/11 - Added getShared singleton method allow users to get a single,
-                 shared instance of the Logger class.
+   (or optionally all data can be written). 
  */
 
 public class Logger {
