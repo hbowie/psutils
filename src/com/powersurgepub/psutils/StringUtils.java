@@ -1569,6 +1569,10 @@ public class StringUtils {
         out.append (c);
       } 
       else
+      if (c == '\'') {
+        // Let's just drop apostrophes
+      }
+      else
       if (out.length() > 0) {
         if (out.charAt(out.length() - 1) != ' ') {
           out.append (' ');
