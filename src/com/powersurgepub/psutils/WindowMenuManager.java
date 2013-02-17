@@ -17,6 +17,7 @@
 package com.powersurgepub.psutils;
 
   import java.awt.*;
+  import java.awt.event.*;
   import java.util.*;
   import javax.swing.*;
 
@@ -101,17 +102,35 @@ public class WindowMenuManager {
       menus.add(windowMenu);
     }
   }
+  
+  /**
+   Add a new JFrame to the Window menu. It will be visible on the menu,
+   but the window will not be made visible nor brought to the front. 
+
+   @param window The JFrame to be added.
+                  
+   */
+  public int add(JFrame window) {
+    int i = getIndexOf(window);
+    if (i < 0) {
+      i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
+    }
+    return i;
+  }
 
   /**
    Add a new JFrame to the Window menu. It will be visible on the menu,
    but the window will not be made visible nor brought to the front. 
 
    @param window The JFrame to be added.
+   @param keyChar The key character to be used to invoke the window, or zero
+                  if no accelerator is to be defined. 
+                  
    */
-  public int add(JFrame window) {
+  public int add(JFrame window, int keyChar) {
     int i = getIndexOf(window);
     if (i < 0) {
-      i = addAtEnd(window);
+      i = addAtEnd(window, keyChar);
     }
     return i;
   }
@@ -152,7 +171,7 @@ public class WindowMenuManager {
   public void makeVisible(JFrame window) {
     int i = getIndexOf(window);
     if (i < 0) {
-      i = addAtEnd(window);
+      i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
     }
     showWindow (window);
   }
@@ -185,9 +204,13 @@ public class WindowMenuManager {
    @param window The window to be added. 
    @return The index at which the window was added to the windows list. 
   */
-  private int addAtEnd(JFrame window) {
+  private int addAtEnd(JFrame window, int keyChar) {
     windows.add(window);
     JMenuItem menuItem = new JMenuItem(window.getTitle());
+    if (keyChar > KeyEvent.VK_UNDEFINED) {
+      menuItem.setAccelerator(KeyStroke.getKeyStroke (keyChar,
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+    }
     menuItem.setActionCommand (window.getTitle());
     menuItem.setToolTipText (window.getTitle());
     menuItem.addActionListener(new java.awt.event.ActionListener() {
