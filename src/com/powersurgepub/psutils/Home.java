@@ -17,6 +17,7 @@
 package com.powersurgepub.psutils;
 
   import com.powersurgepub.xos2.*;
+  import edu.stanford.ejalbert.*;
   import java.io.*;
   import java.net.*;
   import java.util.prefs.*;
@@ -28,6 +29,8 @@ package com.powersurgepub.psutils;
 public class Home {
   
   private static Home         home = null;
+  
+  private edu.stanford.ejalbert.BrowserLauncher launcher = null;
   
   private static final String PREFS_PREFIX   = "/com/powersurgepub/";
   private static final String HTML_FILE_EXT  = ".html";
@@ -309,14 +312,20 @@ public class Home {
       }
     }
     
-    Logger.getShared().recordEvent(LogEvent.NORMAL, 
-        "BrowserLauncher loaded without errors? " +
-          String.valueOf(BrowserLauncher.getLoadedWithoutErrors()) +
-        " JVM Switch: " + 
-          String.valueOf(BrowserLauncher.getJVMSwitch()) +
-        " Browser: " +
-          String.valueOf(BrowserLauncher.locateBrowser()), 
+    try {
+      launcher = new edu.stanford.ejalbert.BrowserLauncher();
+      Logger.getShared().recordEvent(
+        LogEvent.NORMAL, 
+        "BrowserLauncher2 initialized successfully", 
         false);
+    } catch (Exception e) {
+      launcher = null;
+      Logger.getShared().recordEvent(
+        LogEvent.MEDIUM, 
+        "Attempt to initialize BrowserLauncher returned exception: " 
+          + e.toString(), 
+        false);
+    }
     
   } // end constructor
   
@@ -553,19 +562,87 @@ public class Home {
         + programNameLower + HTML_FILE_EXT);
   }
   
-  public void openURL (URL url) {
-    openURL (url.toString());
+  /**
+   Open the passed URL in the user's preferred browser. 
+  
+   @param url The url to be opened. 
+  
+   @return True if everything seemed to go OK. 
+  */
+  public boolean openURL (URL url) {
+    boolean ok = openURL (url.toString());
+    return ok;
   }
   
-  public void openURL (String url) {
+  /**
+   Open the passed local file in the user's preferred browser. 
+  
+   @param file The file to be opened. 
+  
+   @return True if everything seemed to go OK. 
+  */
+  public boolean openURL (File file) {
+
+    boolean ok = true;
+
+    URI uri = file.toURI();
     try {
-      xos.openURL (StringUtils.cleanURLString(url));
-    } catch (java.io.IOException e) {
-      Trouble.getShared().report ("Trouble opening Web page " + url, "Web Browser Problem");
-      Logger.getShared().recordEvent (LogEvent.MEDIUM, 
-        "Open URL I/O Exception " + e.toString(),
-        false);
+      URL url = uri.toURL();
+      ok = openURL(url.toString());
+    } catch (MalformedURLException e) {
+      ok = false;
+      Trouble.getShared().report(
+          "Trouble opening uri " + uri.toString(), 
+          "URI Problem");
+      Logger.getShared().recordEvent(
+          LogEvent.MEDIUM, 
+          "Attempt to open URI " + uri.toString() + 
+            " returned exception: " + e.toString(), 
+          false);
     }
+
+    return ok;
+  }
+  
+  /**
+   Open the passed URL in the user's preferred browser. 
+  
+   @param url The url to be opened. 
+  
+   @return True if everything seemed to go OK. 
+  */
+  public boolean openURL (String url) {
+    
+    boolean ok = true;
+    
+    String urlToOpen = StringUtils.cleanURLString(url);
+    
+    String cleaningMsg = "";
+    if (! url.equals(urlToOpen)) {
+      cleaningMsg = " (" + urlToOpen + " after cleaning)";
+    }
+    
+    Logger.getShared().recordEvent
+        (LogEvent.NORMAL,
+        "Home opening URL " + url + " using BrowserLauncher2" + cleaningMsg,
+        false);
+
+    if (launcher != null) {
+      launcher.openURLinBrowser(urlToOpen);
+    } else {
+      ok = false;
+      Trouble.getShared().report(
+          "Trouble opening url " + url, 
+          "URL Problem");
+      Logger.getShared().recordEvent(
+          LogEvent.MEDIUM, 
+          "Attempt to open URL " + url + 
+            " failed", 
+          false);
+    }
+    
+    return ok;
+
   }
   
   /**

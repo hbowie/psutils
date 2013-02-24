@@ -295,12 +295,8 @@ public class ProgramVersion
     }
   }
   
-  public void openURL (String url) {
-    try {
-      xos.openURL (StringUtils.cleanURLString(url));
-    } catch (java.io.IOException e) {
-      // ???
-    }
+  public boolean openURL (String url) {
+    return Home.getShared().openURL(url);
   }
   
 }

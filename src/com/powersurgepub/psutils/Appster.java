@@ -146,6 +146,7 @@ public class Appster {
     if (mainFrame != null) {
       xos.setMainWindow (mainFrame);
     }
+
   }
 
   public void setMainFrame(JFrame mainFrame) {
@@ -166,62 +167,11 @@ public class Appster {
   }
   
   public boolean openURL (File file) {
-
-      boolean ok = true;
-      
-      URI uri = file.toURI();
-      try {
-        URL url = uri.toURL();
-        ok = openURL(url.toString());
-      } catch (MalformedURLException e) {
-        ok = false;
-        Trouble.getShared().report(
-            mainFrame, 
-            "Trouble opening uri " + uri.toString(), 
-            "URI Problem");
-        Logger.getShared().recordEvent(
-            LogEvent.MEDIUM, 
-            "Attempt to open URI " + uri.toString() + 
-              " returned exception: " + e.toString(), 
-            false);
-      }
-
-      return ok;
+    return home.openURL(file);
   }
   
   public boolean openURL (String url) {
-    
-    boolean ok = true;
-    
-    Logger.getShared().recordEvent
-        (LogEvent.NORMAL, 
-        "openURL Passed URL = " + StringUtils.cleanURLString(url), 
-        false);
-    
-    String urlToOpen = StringUtils.cleanURLString(url);
-    
-    Logger.getShared().recordEvent
-        (LogEvent.NORMAL, 
-        "openURL Cleaned URL = " + urlToOpen, 
-        false);
-
-    try {
-      xos.openURL (urlToOpen);
-    } catch (IOException e) {
-      ok = false;
-      Trouble.getShared().report(
-          mainFrame, 
-          "Trouble opening url " + url, 
-          "URL Problem");
-      Logger.getShared().recordEvent(
-          LogEvent.MEDIUM, 
-          "Attempt to open URL " + url + 
-            " returned exception: " + e.toString(), 
-          false);
-    }
-    
-    return ok;
-
+    return home.openURL(url);
   }
   
 }
