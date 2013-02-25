@@ -1,3 +1,0 @@
-psutils
-
-Copyright 1999 - 2013 Herb Bowie
