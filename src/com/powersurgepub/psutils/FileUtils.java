@@ -35,8 +35,8 @@ public class FileUtils {
   }
   
   /**
-   Copy the contents of one folder to another folder, including all
-   sub-folders.
+   Copy the visible contents of one folder to another folder, including all
+   sub-folders. Skip any hidden files. 
    */
   public static boolean copyFolder (File fromFolder, File toFolder) {
 
@@ -70,7 +70,12 @@ public class FileUtils {
               ok = ensureFolder (toFile);
               outDirList.add (toFile);
             } else {
-              ok = copyFile (fromFile, toFile);
+              if (entry.startsWith(".")
+                  || fromFile.isHidden()) {
+                // Skip hidden files
+              } else {
+                ok = copyFile (fromFile, toFile);
+              }
             } // end if not a directory
           } // end if directory entry is readable
         } // end for each directory entry in current directory
