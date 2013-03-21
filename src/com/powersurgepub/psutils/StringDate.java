@@ -50,6 +50,7 @@ public class StringDate {
   public     static final String FUTURE = "future";
   public     static final String NEXT_YEAR = "next year";
   private    Calendar         today = Calendar.getInstance();
+  private    String           todayYMD = "";
   private    int              currentYear;
   private    int              currentMonth;
   
@@ -66,10 +67,12 @@ public class StringDate {
   private    StringBuilder    end = new StringBuilder();
   
   private    SimpleDateFormat shortFormat = new SimpleDateFormat("EEE MMM dd");
+  private    SimpleDateFormat ymdFormat   = new SimpleDateFormat("yyyy-MM-dd");
   
   public StringDate() {
     currentYear = today.get(Calendar.YEAR);
     currentMonth = today.get(Calendar.MONTH);
+    todayYMD = ymdFormat.format(today.getTime());
     // System.out.println("StringDate constructor current year = "
     //     + String.valueOf(currentYear)
     //     + ", month = " 
@@ -379,6 +382,17 @@ public class StringDate {
     numbers = false;
     letters = false;
     colon = false;
+  }
+  
+  /**
+   If this date is a definite date, with a year, month and day of month,
+   and it's before today, then return true. 
+  
+   @return True if this is a definite date less than today, false otherwise. 
+  */
+  public boolean isInThePast() {
+    String ymd = getYMD();
+    return (ymd.length() > 9 && ymd.compareTo(todayYMD) < 0);
   }
   
   /**
