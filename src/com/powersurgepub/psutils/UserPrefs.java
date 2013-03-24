@@ -620,14 +620,14 @@ public class UserPrefs {
       userPreferences.sync();
     } catch (java.util.prefs.BackingStoreException e) {
       log (LogEvent.MEDIUM,
-          "Preferences backing store exception", false);
+          "Preferences backing store exception " + e.toString(), false);
     }
     
     try {
       systemPreferences.sync();
     } catch (java.util.prefs.BackingStoreException e) {
       log (LogEvent.MEDIUM,
-          "Preferences backing store exception", false);
+          "Preferences backing store exception " + e.toString(), false);
     }
     
     if (home.isRunningFromDropbox()) {

@@ -18,6 +18,7 @@ package com.powersurgepub.psutils;
 
   import com.powersurgepub.xos2.*;
   import edu.stanford.ejalbert.*;
+  import java.awt.event.*;
   import java.io.*;
   import java.net.*;
   import java.util.prefs.*;
@@ -61,6 +62,21 @@ public class Home {
   private XOS                 xos = XOS.getShared();
   
   private URL                 pageURL;
+  
+  private URL                 programHistoryURL;
+  private JMenuItem           helpHistoryMenuItem;
+  
+  private JMenuItem						helpUserGuideMenuItem;
+  
+  private JSeparator          helpSeparator1;
+  
+  private JMenuItem           helpCheckForUpdatesMenuItem;
+  
+  private JMenuItem           helpPSPubWebSite;
+  
+  private JMenuItem           helpSubmitFeedbackMenuItem;
+  
+  private JSeparator          helpSeparator2;
   
   /** 
     Returns a single instance of Home that can be shared by many classes. This
@@ -534,6 +550,77 @@ public class Home {
   }
   
   /**
+    Pass the JMenu item acting as the Help menu. If not running on a Mac, then
+    an About menu item will be added. 
+   
+    @param helpMenu JMenu acting as the Help menu. 
+   */
+  public void setHelpMenu (JMenu helpMenu) {
+    
+    // Add Program History Menu Item
+    helpHistoryMenuItem = new javax.swing.JMenuItem();
+    helpHistoryMenuItem.setText("Program History");
+    helpHistoryMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        openProgramHistory();
+      }
+    });
+    helpMenu.add(helpHistoryMenuItem);
+    
+    // Add User Guide Menu Item
+    helpUserGuideMenuItem = new javax.swing.JMenuItem();
+    helpUserGuideMenuItem.setText("User Guide");
+    helpUserGuideMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        openUserGuide();
+      }
+    });
+    helpMenu.add(helpUserGuideMenuItem);
+    
+    helpSeparator1 = new JSeparator();
+    helpMenu.add (helpSeparator1);
+    
+    // Add Check for Updates Menu Item
+    helpCheckForUpdatesMenuItem = new javax.swing.JMenuItem();
+    helpCheckForUpdatesMenuItem.setText("Check for Updates...");
+    helpCheckForUpdatesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ProgramVersion.getShared().informUserIfNewer();
+        ProgramVersion.getShared().informUserIfLatest();
+      }
+    });
+    helpMenu.add(helpCheckForUpdatesMenuItem);
+    
+    helpPSPubWebSite = new JMenuItem (programName + " Home Page");
+    helpMenu.add (helpPSPubWebSite);
+    helpPSPubWebSite.addActionListener (new ActionListener() 
+      {
+        public void actionPerformed (ActionEvent event) {
+          openHomePage();
+        } // end ActionPerformed method
+      } // end action listener
+    );
+    
+    helpSubmitFeedbackMenuItem = new JMenuItem ("Submit Feedback");
+    helpMenu.add (helpSubmitFeedbackMenuItem);
+    helpSubmitFeedbackMenuItem.addActionListener (new ActionListener() 
+      {
+        public void actionPerformed (ActionEvent event) {
+          openURL ("mailto:support@powersurgepub.com");
+        } // end ActionPerformed method
+      } // end action listener
+    );
+    
+    helpSeparator2 = new JSeparator();
+    helpMenu.add (helpSeparator2);
+    
+  } // end method
+  
+  public JMenuItem getHelpMenuItem() {
+    return helpUserGuideMenuItem;
+  }
+  
+  /**
    Open the user guide for the program. Presumed to be found in the application
    resource folder, named with the program name in all lower cases, no spaces,
    with an html file extension. 
@@ -554,6 +641,7 @@ public class Home {
       programHistoryURL = new URL (pageURL, PROGRAM_HISTORY);
       openURL (programHistoryURL);
     } catch (MalformedURLException e) {
+      System.out.println("Home.openProgramHistory MalformedURLException " + e.toString());
     }
   }
   
