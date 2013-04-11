@@ -35,7 +35,8 @@ public class WindowMenuManager {
   
   private             ArrayList<JMenu>       menus = new ArrayList<JMenu>();
 
-  private             ArrayList<JFrame>      windows = new ArrayList<JFrame>();
+  private             ArrayList<WindowToManage> windows 
+      = new ArrayList<WindowToManage>();
 
   private WindowMenuManager(JMenu windowMenu) {
     addWindowMenu (windowMenu);
@@ -104,13 +105,13 @@ public class WindowMenuManager {
   }
   
   /**
-   Add a new JFrame to the Window menu. It will be visible on the menu,
+   Add a new WindowToManage to the Window menu. It will be visible on the menu,
    but the window will not be made visible nor brought to the front. 
 
-   @param window The JFrame to be added.
+   @param window The WindowToManage to be added.
                   
    */
-  public int add(JFrame window) {
+  public int add(WindowToManage window) {
     int i = getIndexOf(window);
     if (i < 0) {
       i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
@@ -119,15 +120,15 @@ public class WindowMenuManager {
   }
 
   /**
-   Add a new JFrame to the Window menu. It will be visible on the menu,
+   Add a new WindowToManage to the Window menu. It will be visible on the menu,
    but the window will not be made visible nor brought to the front. 
 
-   @param window The JFrame to be added.
+   @param window The WindowToManage to be added.
    @param keyChar The key character to be used to invoke the window, or zero
                   if no accelerator is to be defined. 
                   
    */
-  public int add(JFrame window, int keyChar) {
+  public int add(WindowToManage window, int keyChar) {
     int i = getIndexOf(window);
     if (i < 0) {
       i = addAtEnd(window, keyChar);
@@ -136,14 +137,14 @@ public class WindowMenuManager {
   }
   
   public void locateUpperLeftAndMakeVisible 
-      (Component refComponent, JFrame window) {
+      (Component refComponent, WindowToManage window) {
     
     locateUpperLeft(refComponent, window);
     makeVisible (window);
   }
   
   public void locateUpperLeft 
-      (Component refComponent, JFrame window) {
+      (Component refComponent, WindowToManage window) {
     
     window.setLocation (
 			refComponent.getX() + CHILD_WINDOW_X_OFFSET, 
@@ -151,7 +152,7 @@ public class WindowMenuManager {
   }
   
   public void locateCenterAndMakeVisible
-      (Component refComponent, JFrame window) {
+      (Component refComponent, WindowToManage window) {
     
     int w = refComponent.getWidth();
 	  int h = refComponent.getHeight();
@@ -164,11 +165,11 @@ public class WindowMenuManager {
   }
 
   /**
-   Add a new JFrame to the Window menu, and bring the window to the front.
+   Add a new WindowToManage to the Window menu, and bring the window to the front.
 
    @param window The window to be made visible. 
    */
-  public void makeVisible(JFrame window) {
+  public void makeVisible(WindowToManage window) {
     int i = getIndexOf(window);
     if (i < 0) {
       i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
@@ -181,7 +182,7 @@ public class WindowMenuManager {
 
    @param window The window to be hidden. 
    */
-  public void hide(JFrame window) {
+  public void hide(WindowToManage window) {
     int i = getIndexOf(window);
     if (i >= 0) {
       for (JMenu menuInList : menus) {
@@ -204,7 +205,7 @@ public class WindowMenuManager {
    @param window The window to be added. 
    @return The index at which the window was added to the windows list. 
   */
-  private int addAtEnd(JFrame window, int keyChar) {
+  private int addAtEnd(WindowToManage window, int keyChar) {
     windows.add(window);
     JMenuItem menuItem = new JMenuItem(window.getTitle());
     if (keyChar > KeyEvent.VK_UNDEFINED) {
@@ -231,18 +232,18 @@ public class WindowMenuManager {
    */
   private void windowMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
     String title = evt.getActionCommand();
-    JFrame window = getWindow(title);
+    WindowToManage window = getWindow(title);
     if (window != null) {
       showWindow (window);
     }
   } // end method
 
-  private void showWindow(JFrame window) {
+  private void showWindow(WindowToManage window) {
     window.setVisible(true);
     window.toFront();
   }
 
-  public JFrame getWindow(String title) {
+  public WindowToManage getWindow(String title) {
     int i = getIndexOf(title);
     if (i >= 0) {
       return get(i);
@@ -251,7 +252,7 @@ public class WindowMenuManager {
     }
   }
 
-  public int getIndexOf(JFrame window) {
+  public int getIndexOf(WindowToManage window) {
     String title = window.getTitle();
     return getIndexOf(title);
   }
@@ -274,7 +275,7 @@ public class WindowMenuManager {
   }
 
   public String getTitle(int i) {
-    JFrame window = get(i);
+    WindowToManage window = get(i);
     if (window == null) {
       return "";
     } else {
@@ -282,11 +283,11 @@ public class WindowMenuManager {
     }
   }
 
-  public JFrame get(int i) {
+  public WindowToManage get(int i) {
     if (i < 0 || i >= windows.size()) {
       return null;
     } else {
-      return (JFrame)windows.get(i);
+      return windows.get(i);
     }
   }
 
