@@ -16,9 +16,12 @@
 
 package com.powersurgepub.psutils;
 
-/**
+  import java.awt.*;
 
- @author hbowie
+/**
+ Interface for a window to be managed by WindowMenuManager.
+
+ @author Herb Bowie
  */
 public interface WindowToManage {
   
