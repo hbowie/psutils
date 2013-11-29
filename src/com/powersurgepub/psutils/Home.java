@@ -17,7 +17,7 @@
 package com.powersurgepub.psutils;
 
   import com.powersurgepub.xos2.*;
-  import edu.stanford.ejalbert.*;
+  import java.awt.*;
   import java.awt.event.*;
   import java.io.*;
   import java.net.*;
@@ -31,7 +31,8 @@ public class Home {
   
   private static Home         home = null;
   
-  private edu.stanford.ejalbert.BrowserLauncher launcher = null;
+  private              Desktop desktop;
+  private              boolean browserAvailable = false;
   
   private static final String PREFS_PREFIX   = "/com/powersurgepub/";
   private static final String HTML_FILE_EXT  = ".html";
@@ -328,19 +329,22 @@ public class Home {
       }
     }
     
-    try {
-      launcher = new edu.stanford.ejalbert.BrowserLauncher();
-      Logger.getShared().recordEvent(
-        LogEvent.NORMAL, 
-        "BrowserLauncher2 initialized successfully", 
-        false);
-    } catch (Exception e) {
-      launcher = null;
-      Logger.getShared().recordEvent(
-        LogEvent.MEDIUM, 
-        "Attempt to initialize BrowserLauncher returned exception: " 
-          + e.toString(), 
-        false);
+    if (Desktop.isDesktopSupported()) {
+      desktop = Desktop.getDesktop();
+      if (desktop.isSupported(Desktop.Action.BROWSE)) {
+        browserAvailable = true;
+      } else {
+        Logger.getShared().recordEvent(
+            LogEvent.HIGH_SEVERITY, 
+            "Desktop Browse not supported", 
+            false);
+      }
+    } else {
+      desktop = null;
+        Logger.getShared().recordEvent(
+            LogEvent.HIGH_SEVERITY, 
+            "Desktop not available", 
+            false);
     }
     
   } // end constructor
@@ -715,8 +719,21 @@ public class Home {
         "Home opening URL " + url + " using BrowserLauncher2" + cleaningMsg,
         false);
 
-    if (launcher != null) {
-      launcher.openURLinBrowser(urlToOpen);
+    if (browserAvailable) {
+        try {
+          URI uri = new URI(urlToOpen);
+          desktop.browse(uri);
+        } catch (URISyntaxException e) {
+          Logger.getShared().recordEvent
+            (LogEvent.NORMAL,
+            "URI Syntax Exception",
+            false);
+        } catch (IOException ex) {
+          Logger.getShared().recordEvent
+            (LogEvent.NORMAL,
+            "I/O Exception",
+            false);
+        }
     } else {
       ok = false;
       Trouble.getShared().report(

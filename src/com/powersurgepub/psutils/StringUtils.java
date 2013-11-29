@@ -1356,6 +1356,40 @@ public class StringUtils {
 	} // end of method indexOfIgnoreCase
   
   /**
+   Converts a string to an HTML ID, removing white space, 
+   removing any odd characters, and making all letters lower-case. Added
+   for consistency with Marked app. 
+  
+   @param in The string to be converted to an HTML ID. 
+  
+   @return The resulting HTML ID. 
+  */
+  public static String makeID (String in) {
+
+    StringBuffer out = new StringBuffer();
+    char c;
+    int ci;
+    for (int i = 0; i < in.length(); i++) {
+      c = in.charAt (i);
+      ci = c;
+      // System.out.println ("  c = " + c + " (" + 
+      //     String.valueOf (ci) + ")");
+      if (ci > 127) {
+        // ignore funny characters
+      }
+      else
+      if (Character.isLetter (c)) {
+        out.append (Character.toLowerCase (c));
+      }
+      else
+      if (Character.isDigit (c)) {
+        out.append (c);
+      } 
+    } // end for each character in input string
+    return out.toString();
+  }
+  
+  /**
    Converts a string to a conventional, universal file name, changing spaces
    to dashes, removing any odd characters, making all letters lower-case, and
    converting white space to hyphens.
