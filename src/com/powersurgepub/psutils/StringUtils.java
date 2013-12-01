@@ -268,26 +268,16 @@ public class StringUtils {
   }
   
   public static boolean isDash (char c) {
-    return (c == '-' || c == '~' || c == '÷' || c == 'Ñ' || c == 'Ğ');
+    return (c == '-' || c == '~' || c == 'â€”' || c == 'â€“');
   }
   
   public static boolean isDoubleQuote (char c) {
-    return (c == '"' || c == 'Ó' || c == 'Ò' || c == 'ã' || c == 'ä' 
-        || c == 'Ò' || c == 'Ó');
+    return (c == '"' || c == 'â€œ' || c == 'â€');
   }
   
   public static boolean isApostrophe(char c) {
-    return (c == 'Õ' || c == '\'' || c == 'Õ');
+    return (c == 'â€™' || c == '\'');
   }
-  
-  /*
-  public static boolean isApostrophe(char c) {
-    return (c == 'Õ' || c == '\'');
-  }
-  
-  public static boolean isDoubleQuote(char c) {
-    return (c == 'Ò' || c == 'Ó'  || c == '"');
-  } */
   
   public static String colorToHexString (Color color) {
     int red = color.getRed();

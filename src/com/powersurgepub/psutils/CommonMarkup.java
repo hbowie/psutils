@@ -110,7 +110,7 @@ public class CommonMarkup {
       else
 
       // If we have an en dash, replace it with the appropriate entity
-      if (c == 'Ð' && outputHTML) {
+      if (c == '-' && outputHTML) {
         t.append ("&#8211;");
         lastCharWasWhiteSpace = false;
         lastCharWasEmDash = false;
