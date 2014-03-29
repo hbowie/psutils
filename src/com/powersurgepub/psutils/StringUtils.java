@@ -1451,10 +1451,28 @@ public class StringUtils {
     // System.out.println ("  in = " + in);
     StringBuilder out = new StringBuilder();
     char c;
+    char lastIn = ' ';
+    char lastOut = ' ';
+    char nextChar = ' ';
     int ci;
-    for (int i = 0; i < in.length(); i++) {
+    int i = 0;
+    if (in.startsWith("http://")) {
+      i = 7;
+    }
+    while (i < in.length()) {
+      
+      // Gather data about our position in the strings
       c = in.charAt (i);
+      if (in.length() > (i + 1)) {
+        nextChar = in.charAt(i + 1);
+      } else {
+        nextChar = ' ';
+      }
       ci = c;
+      if (out.length() > 0) {
+        lastOut = out.charAt(out.length() - 1);
+      }
+      
       // System.out.println ("  c = " + c + " (" + 
       //     String.valueOf (ci) + ")");
       if (ci > 127) {
@@ -1469,20 +1487,58 @@ public class StringUtils {
         out.append (c);
       } 
       else
+      if (c == ' ' && lastOut == ' ') {
+        // avoid consecutive spaces
+      }
+      else
+      if (c == ':' && lastIn == ':') {
+        // avoid consecutive colons
+      }
+      else
       if (c == ' ' || c == '_' || c == '-') {
         out.append (c);
       } 
       else
-      if (c == '\'') {
-        // Let's just drop apostrophes
+      if (c == '\''
+          || c == '('
+          || c == ')'
+          || c == '['
+          || c == ']'
+          || c == '{'
+          || c == '}') {
+        // Let's just drop some punctuation
+      }
+      else
+      if (c == '/') {
+        if (lastOut != ' ') {
+          out.append(' ');
+        }
+      }
+      else
+      if (c == '.'
+          && ((i + 3) < in.length())
+          && (in.substring(i + 1, i + 4).equals("com"))) {
+        i = i + 3; // Drop .com
+      }
+      else
+      if (c == '&') {
+        if (lastOut != ' ') {
+          out.append(' ');
+        }
+        out.append("and ");
       }
       else
       if (out.length() > 0) {
-        if (out.charAt(out.length() - 1) != ' ') {
-          out.append (' ');
+        // if (out.charAt(out.length() - 1) != ' ') {
+        //   out.append (' ');
+        // }
+        if (nextChar == ' ' && lastOut != ' ') {
+          out.append(' ');
         }
         out.append (FILE_NAME_WORD_SEPARATOR);
       }
+      lastIn = c;
+      i++;
     } // end for each character in input string
     if (out.length() > 0) {
       if (out.charAt (out.length() - 1) == FILE_NAME_WORD_SEPARATOR) {
