@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2013 Herb Bowie
+ * Copyright 1999 - 2014 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -383,6 +383,34 @@ public class FileName {
     String firstFolder = getFirstFolder();
     getFirstFolderNext();
   } // end constructor
+  
+  /**
+   See if this file/folder is beneath another folder in the directory structure. 
+  
+   @param fn2 The second folder, to be compared to this one. 
+  
+   @return True if this file/folder is beneath the other one; false otherwise. 
+  */
+  public boolean isBeneath (FileName fn2) {
+    boolean matched = true;
+    this.getFirstFolderNext();
+    fn2.getFirstFolderNext();
+    if (this.getNumberOfFolders() >= fn2.getNumberOfFolders()) {
+      int i = 1;
+      while (matched && i <= fn2.getNumberOfFolders()) {
+        String folder1 = this.getFolder(i);
+        String folder2 = fn2.getFolder(i);
+        if (folder1.equals(folder2)) {
+          i++;
+        } else {
+          matched = false;
+        }
+      } // end of folder comparison
+    } else {
+      matched = false;
+    }
+    return matched;
+  }
   
   /**
      Resolve a relative file reference using this File as
