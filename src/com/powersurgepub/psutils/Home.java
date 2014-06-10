@@ -36,8 +36,7 @@ public class Home {
   
   private static final String PREFS_PREFIX   = "/com/powersurgepub/";
   private static final String HTML_FILE_EXT  = ".html";
-  private static final String PROGRAM_HISTORY  
-      = "versions" + HTML_FILE_EXT;
+
   private static final String MAC_DOCS                    = "Documents";
   private static final String WINDOWS_DOCS                = "My Documents";
   
@@ -63,7 +62,7 @@ public class Home {
   private XOS                 xos = XOS.getShared();
   
   private URL                 pageURL;
-  
+  private String              programHistory;
   private URL                 programHistoryURL;
   private JMenuItem           helpHistoryMenuItem;
   
@@ -632,7 +631,8 @@ public class Home {
   public void openUserGuide() {
     URL userGuideURL;
     try {
-      userGuideURL = new URL (pageURL, programNameLower + HTML_FILE_EXT);
+      userGuideURL = new URL 
+          (pageURL, "help/" + programNameNoSpace + "-user-guide.html");
       openURL (userGuideURL);
     } catch (MalformedURLException e) {
     }
@@ -640,9 +640,9 @@ public class Home {
   
   public void openProgramHistory() {
   
-    URL programHistoryURL;
     try {
-      programHistoryURL = new URL (pageURL, PROGRAM_HISTORY);
+      programHistoryURL = new URL 
+          (pageURL, "help/" + programNameNoSpace + "-history.html");
       openURL (programHistoryURL);
     } catch (MalformedURLException e) {
       System.out.println("Home.openProgramHistory MalformedURLException " + e.toString());
@@ -651,7 +651,7 @@ public class Home {
   
   public void openHomePage() {
     openURL ("http://www.powersurgepub.com/products/"
-        + programNameLower + HTML_FILE_EXT);
+        + programNameNoSpace + "/index.html");
   }
   
   /**
