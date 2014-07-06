@@ -29,6 +29,9 @@ package com.powersurgepub.psutils;
  */
 public class Home {
   
+  private     static  final int   DEFAULT_WIDTH = 780;
+  private     static  final int   DEFAULT_HEIGHT = 540;
+  
   private static Home         home = null;
   
   private              Desktop desktop;
@@ -68,15 +71,16 @@ public class Home {
   
   private JMenuItem						helpUserGuideMenuItem;
   
-  private JSeparator          helpSeparator1;
-  
   private JMenuItem           helpCheckForUpdatesMenuItem;
   
   private JMenuItem           helpPSPubWebSite;
   
   private JMenuItem           helpSubmitFeedbackMenuItem;
   
-  private JSeparator          helpSeparator2;
+  private JMenuItem           helpReduceWindowSize;
+  
+  private JFrame              mainWindow = null;
+  
   
   /** 
     Returns a single instance of Home that can be shared by many classes. This
@@ -558,17 +562,9 @@ public class Home {
    
     @param helpMenu JMenu acting as the Help menu. 
    */
-  public void setHelpMenu (JMenu helpMenu) {
+  public void setHelpMenu (JFrame mainWindow, JMenu helpMenu) {
     
-    // Add Program History Menu Item
-    helpHistoryMenuItem = new javax.swing.JMenuItem();
-    helpHistoryMenuItem.setText("Program History");
-    helpHistoryMenuItem.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        openProgramHistory();
-      }
-    });
-    helpMenu.add(helpHistoryMenuItem);
+    this.mainWindow = mainWindow;
     
     // Add User Guide Menu Item
     helpUserGuideMenuItem = new javax.swing.JMenuItem();
@@ -578,10 +574,19 @@ public class Home {
         openUserGuide();
       }
     });
-    helpMenu.add(helpUserGuideMenuItem);
+    helpMenu.insert(helpUserGuideMenuItem, 0);
     
-    helpSeparator1 = new JSeparator();
-    helpMenu.add (helpSeparator1);
+    // Add Program History Menu Item
+    helpHistoryMenuItem = new javax.swing.JMenuItem();
+    helpHistoryMenuItem.setText("Program History");
+    helpHistoryMenuItem.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        openProgramHistory();
+      }
+    });
+    helpMenu.insert(helpHistoryMenuItem, 1);
+    
+    helpMenu.insertSeparator(2);
     
     // Add Check for Updates Menu Item
     helpCheckForUpdatesMenuItem = new javax.swing.JMenuItem();
@@ -592,10 +597,9 @@ public class Home {
         ProgramVersion.getShared().informUserIfLatest();
       }
     });
-    helpMenu.add(helpCheckForUpdatesMenuItem);
+    helpMenu.insert(helpCheckForUpdatesMenuItem, 3);
     
     helpPSPubWebSite = new JMenuItem (programName + " Home Page");
-    helpMenu.add (helpPSPubWebSite);
     helpPSPubWebSite.addActionListener (new ActionListener() 
       {
         public void actionPerformed (ActionEvent event) {
@@ -603,9 +607,9 @@ public class Home {
         } // end ActionPerformed method
       } // end action listener
     );
+    helpMenu.insert(helpPSPubWebSite, 4);
     
     helpSubmitFeedbackMenuItem = new JMenuItem ("Submit Feedback");
-    helpMenu.add (helpSubmitFeedbackMenuItem);
     helpSubmitFeedbackMenuItem.addActionListener (new ActionListener() 
       {
         public void actionPerformed (ActionEvent event) {
@@ -613,11 +617,33 @@ public class Home {
         } // end ActionPerformed method
       } // end action listener
     );
+    helpMenu.insert(helpSubmitFeedbackMenuItem, 5);
     
-    helpSeparator2 = new JSeparator();
-    helpMenu.add (helpSeparator2);
+    helpMenu.insertSeparator(6);
+    
+    helpReduceWindowSize = new JMenuItem ("Reduce Window Size");
+    helpReduceWindowSize.setAccelerator (KeyStroke.getKeyStroke (KeyEvent.VK_W,
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+    helpReduceWindowSize.addActionListener(new ActionListener()
+      {
+        public void actionPerformed (ActionEvent event) {
+          setDefaultScreenSizeAndLocation();
+        }
+      });
+    helpMenu.insert(helpReduceWindowSize, 7);
+
     
   } // end method
+  
+  public void setDefaultScreenSizeAndLocation() {
+
+		mainWindow.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    mainWindow.setResizable (true);
+    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+    int defaultX = (d.width - mainWindow.getSize().width) / 2;
+    int defaultY = (d.height - mainWindow.getSize().height) / 2;
+		mainWindow.setLocation (defaultX, defaultY);
+  }
   
   public JMenuItem getHelpMenuItem() {
     return helpUserGuideMenuItem;
