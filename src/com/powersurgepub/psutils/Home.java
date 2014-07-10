@@ -300,7 +300,8 @@ public class Home {
 
     // Create the image icon if we can find the icon file
     icon = null;
-    File iconFile = new File (appFolder, programNameNoSpace + "_icon.png");
+    File iconFolder = new File (appFolder, "logos");
+    File iconFile = new File (iconFolder, programNameNoSpace + ".png");
     if (iconFile.exists()) {
       URI iconURI = iconFile.toURI();
       URL iconURL = null;
