@@ -129,6 +129,10 @@ public class CalcParser {
                 result = result.add(number);
               }
               else
+              if (operand == '-') {
+                result = result.subtract(number);
+              }
+              else
               if (operand == '=') {
                 result = number;
               }
@@ -156,7 +160,9 @@ public class CalcParser {
            (word.charAt(0) == '=' || 
             word.charAt(0) == 'x' || 
             word.charAt(0) == 'X' || 
-            word.charAt(0) == '*')) {
+            word.charAt(0) == '*' ||
+            word.charAt(0) == '-' ||
+            word.charAt(0) == '+')) {
           operand = word.charAt(0);
           if (operand == '=') {
             result = BigDecimal.ZERO;
