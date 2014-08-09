@@ -1417,7 +1417,7 @@ public class StringUtils {
         whiteSpace = false;
       } 
       else
-      if (c == ' ' || c == '_') {
+      if (c == ' ' || c == '_' || c == FILE_NAME_WORD_SEPARATOR) {
         if (whiteSpace) {
           // do nothing -- don't want multiple separators in a row
         } else {
