@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 - 2013 Herb Bowie
+ * Copyright 2010 - 2014 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,10 +73,6 @@ public class StringDate {
     currentYear = today.get(Calendar.YEAR);
     currentMonth = today.get(Calendar.MONTH);
     todayYMD = ymdFormat.format(today.getTime());
-    // System.out.println("StringDate constructor current year = "
-    //     + String.valueOf(currentYear)
-    //     + ", month = " 
-    //     + String.valueOf(currentMonth));
   }
   
   /**
@@ -414,6 +410,15 @@ public class StringDate {
       }
     }
     return ymd.toString();
+  }
+  
+  /**
+   Return today's date in Year-Month-Day format. 
+  
+   @return Current date in yyyy-mm-dd format. 
+  */
+  public String getTodayYMD() {
+    return todayYMD;
   }
   
   /**
