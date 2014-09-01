@@ -46,8 +46,7 @@ public class StringDate {
   private    StringBuilder    year2 = new StringBuilder();
   private    StringBuilder    opYear = new StringBuilder();
   
-  private    boolean          future = false;
-  public     static final String FUTURE = "future";
+  private    boolean          nextYear = false;
   public     static final String NEXT_YEAR = "next year";
   private    Calendar         today = Calendar.getInstance();
   private    String           todayYMD = "";
@@ -130,45 +129,36 @@ public class StringDate {
         opYear.append(" - ");
         opYear.append(year2);
       }
-      // System.out.println("  Op year = " 
-      //     + year1.toString()
-      //     + " - "
-      //     + year2.toString());
     }
     
     return (year1.length() == 4);
   }
   
   /**
-   If the status of an item is "Future", then adjust the year to be a future 
-   year. 
+   If the status of an item is "Next Year", then adjust the year to be 
+   the following year. 
   
-   @param futureStr The status of an item. If it says "Future", then 
-                    adjust the year to be a future year. 
+   @param nextYearStr The status of an item. If it says "Next Year", then 
+                    adjust the year to be a nextYear year. 
   */
-  public void setFuture(String futureStr) {
-    String futureLower = futureStr.toLowerCase();
-    if (futureLower.indexOf(FUTURE) >= 0) {
-      setFuture(true);
-    }
-    else
-    if (futureLower.indexOf(NEXT_YEAR) >= 0) {
-      setFuture(true);
+  public void setNextYear(String nextYearStr) {
+    String nextYearLower = nextYearStr.toLowerCase();
+    if (nextYearLower.indexOf(NEXT_YEAR) >= 0) {
+      setNextYear(true);
     } 
     else {
-      setFuture(false);
+      setNextYear(false);
     } 
   }
   
   /**
-   If this is a future item, then adjust the year to be a future 
+   If this is a nextYear item, then adjust the year to be a nextYear 
    year. 
   
-   @param future If true, then adjust the year to be a future year. 
+   @param nextYear If true, then adjust the year to be a nextYear year. 
   */
-  public void setFuture(boolean future) {
-    this.future = future;
-    // System.out.println("  Set future to " + String.valueOf(future));
+  public void setNextYear(boolean nextYear) {
+    this.nextYear = nextYear;
   }
   
   /**
@@ -268,14 +258,13 @@ public class StringDate {
       } catch (NumberFormatException e) {
         // do nothing
       }
-      while (future
+      while (nextYear
           && ((year < currentYear)
             || (year == currentYear && month <= currentMonth))) {
         year++;
         yyyy = zeroPad(year, 4);
       }
     }
-    // System.out.println("  Parse " + getYMD() + " from " + when);
   } // end parse method
   
   /**
@@ -378,6 +367,19 @@ public class StringDate {
     numbers = false;
     letters = false;
     colon = false;
+  }
+  
+  /**
+   Subtract 1 from the year. 
+   */
+  public void decrementYear() {
+    try {
+      int year = Integer.parseInt(yyyy);
+      year--;
+      yyyy = String.format("%d", year);
+    } catch (NumberFormatException e) {
+      // Skip it      
+    }
   }
   
   /**
