@@ -511,6 +511,19 @@ public class FileName {
   }
   
   /**
+   Get the last (lowermost) folder in the path. 
+  
+   @return The name of the folder. 
+  */
+  public String getLastFolder () {
+    if (numberOfFolders > 0) {
+      return getFolder(numberOfFolders - 1);
+    } else {
+      return "";
+    }
+  }
+  
+  /**
      Resets folder index so as to start with first when getNextFolder
      is called. 
    */
