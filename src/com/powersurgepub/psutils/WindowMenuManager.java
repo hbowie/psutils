@@ -71,7 +71,7 @@ public class WindowMenuManager {
   }
 
   private WindowMenuManager () {
-
+    
   }
 
   /**
