@@ -517,7 +517,7 @@ public class FileName {
   */
   public String getLastFolder () {
     if (numberOfFolders > 0) {
-      return getFolder(numberOfFolders - 1);
+      return getFolder(numberOfFolders);
     } else {
       return "";
     }
