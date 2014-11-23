@@ -1447,8 +1447,7 @@ public class StringUtils {
    @return The resulting file name. 
   */
   public static String makeReadableFileName (String in) {
-    // System.out.println ("makeFileName");
-    // System.out.println ("  in = " + in);
+
     StringBuilder out = new StringBuilder();
     char c;
     char lastIn = ' ';
