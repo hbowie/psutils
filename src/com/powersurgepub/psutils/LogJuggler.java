@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2013 Herb Bowie
+ * Copyright 1999 - 2014 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,7 @@
 
 package com.powersurgepub.psutils;
 
-  import com.powersurgepub.psutils.LogData;
-  import com.powersurgepub.psutils.LogEvent;
-  import com.powersurgepub.psutils.Logger;
-  import com.powersurgepub.psutils.LogOutput;
-  import com.powersurgepub.psutils.LogOutputDisk;
-  import com.powersurgepub.psutils.LogOutputNone;
-	import com.powersurgepub.psutils.LogOutputText;
-  import java.lang.Object;
-  import java.lang.String;
   import javax.swing.*;
-
-   
 
 /**
 
