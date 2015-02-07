@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2013 Herb Bowie
+ * Copyright 1999 - 2015 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public class StringUtils {
   public final static String HTML_DOUBLE_QUOTE = "&quot;";
   public final static String HTTP = "http://";
   public final static char   FILE_NAME_WORD_SEPARATOR = '-';
+  public static final String SP_SITES = "/sites";
 
   /**
      Tests the class.
@@ -219,6 +220,337 @@ public class StringUtils {
 
   private StringUtils () {
     super ();
+  }
+  
+  /**
+   Utility to tweak any link. 
+  
+   @param linkToTweak    The link to be tweaked. 
+   @param showSpaces     Should spaces be shown as spaces?
+   @param removeSPCruft  Should we remove SharePoint cruft?
+   @param insertRedirect Should we insert a redirect to the URL?
+   @param redirectURL    The redirect string to use, if requested. 
+  
+   @return The new link, after tweaking. 
+  */
+  public static String tweakAnyLink(
+      String linkToTweak,
+      boolean showSpaces,
+      boolean removeSPCruft,
+      boolean insertRedirect,
+      String redirectURL) {
+    
+    StringBuilder link = new StringBuilder(linkToTweak.trim());
+    
+    // Remove angle brackets around the link
+    if (link.length() > 2 &&
+        link.charAt(0) == '<') {
+      link.deleteCharAt(0);
+    }
+    if (link.length() > 1 && 
+        link.charAt(link.length() - 1) == '>') {
+      link.deleteCharAt(link.length() - 1);
+    }
+    
+    // If it's a file path, insert the proper URL protocol (aka scheme)
+    // and make sure it's got five slashes following. 
+    if (link.length() > 0 && 
+        (link.charAt(0) == '\\' || link.charAt(0) == '/')) {
+      link.insert(0, "file:");  
+    }
+    if (link.length() >= 5
+        && link.substring(0,5).equalsIgnoreCase("file:")) {
+      while (link.length() > 5
+          && (link.charAt(5) == '/' || link.charAt(5) == '\\')) {
+        link.deleteCharAt(5);
+      }
+      link.delete(0, 5);
+      link.insert(0, "file://///");
+    }
+    
+    // Remove a trailing period, in case one got attached somehow along the way
+    if (link.length() > 0 &&
+        link.charAt(link.length() - 1) == '.') {
+      link.deleteCharAt(link.length() - 1);
+    }
+    
+    // Let's make one pass through the link to normalize special characters
+    int i = 0;  // Point to current position being examined
+    int j = 0;  // After change, point to new position to be examined
+    
+    while (i < link.length()) {
+      j = i;
+      
+      // If user wants to see spaces, then let's show them spaces
+      if (j == i && showSpaces) {
+        j = ifMatchReplaceWith (link, i, "%20", " ");
+      }
+      if (j == i
+          && showSpaces) {
+        j = ifMatchReplaceWith (link, i, "%2520", " ");
+      }
+      
+      // Let's return other common characters proxies to their benign real selves
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%26", "&");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%28", "(");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%29", ")");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2d", "-");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2D", "-");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2e", ".");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2E", ".");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2f", "/");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2F", "/");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%252F", "/");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3a", ":");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3A", ":");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3d", "=");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3D", "=");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3f", "?");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%3F", "?");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%2520", "%20");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%5f", "_");
+      }
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "%5F", "_");
+      }
+      
+      // If we've got a backslash being used to escape a space, then let's
+      // remove the escape character and leave the space. 
+      if (j == i) {
+        if (showSpaces) {
+          j = ifMatchReplaceWith (link, i, "\\ ", " ");
+        } else {
+          j = ifMatchReplaceWith (link, i, "\\ ", "%20");
+        }
+      }
+      // If we've got backslashes, let's turn them around
+      if (j == i) {
+        j = ifMatchReplaceWith (link, i, "\\", "/");
+      }
+      
+      // If user doesn't want to see spaces, then let's encode them
+      if (j == i
+          && (! showSpaces)) {
+        j = ifMatchReplaceWith (link, i, " ", "%20");
+      }
+      
+      // Remove carriage returns, tabs, line feeds, etc.
+      if (j == i) {
+        if (link.charAt(i) == '\r' 
+            || link.charAt(i) == '\n'
+            || link.charAt(i) == '\t'
+            || link.charAt(i) == '\"') {
+          link.deleteCharAt(i);
+        } else {
+          i++;
+        }
+      } else {
+        i = j;
+      }
+    }
+    
+    // Remove email quote identifiers
+    if (j == i) {
+      j = ifMatchReplaceWith (link, i, "> ", "");
+    }
+    
+    // Let's make another couple of passes through the link to clean up SharePoint cruft
+    if (removeSPCruft) {
+      
+      // Pass 1 -- Look for a duplication of '/sites'
+      i = 0;
+      int sites1Index = -1;
+
+      while (i < link.length()) {
+        j = i;
+        
+        // If we find '/sites' repeated, let's delete the duplication
+        if ((i + SP_SITES.length()) < link.length()
+            && link.substring(i, i + SP_SITES.length()).equals(SP_SITES)) {
+          if (sites1Index < 0) {
+            sites1Index = i;
+          } else {
+            link.delete(sites1Index, i);
+            j = sites1Index + SP_SITES.length();
+          }
+        }
+        
+        if (j == i) {
+          i++;
+        } else {
+          i = j;
+        }
+      } // end while scanning link
+        
+      // Pass 2 -- Look for everything else
+      i = 0;
+
+      while (i < link.length()) {
+        j = i;
+
+        // Delete '&Folder' and anything that follows
+        if (j == i && i < link.length()) {
+          ifMatchDeleteToEnd (link, i, "&Folder");
+        }
+        
+        // Delete '&Source=' and anything that follows
+        if (j == i && i < link.length()) {
+          ifMatchDeleteToEnd (link, i, "&Source=");
+        }
+        
+        // Delete '&SortField=' and anything that follows
+        if (j == i && i < link.length()) {
+          ifMatchDeleteToEnd (link, i, "&SortField=");
+        }
+        
+        // Delete '?InitialTabId=' and anything that follows
+        if (j == i && i < link.length()) {
+          ifMatchDeleteToEnd (link, i, "?InitialTabId=");
+        }
+        
+        // Delete '?Web=' and anything that follows
+        if (j == i && i < link.length()) {
+          ifMatchDeleteToEnd (link, i, "?Web=");
+        }
+
+        if (j == i && i < link.length()) {
+          j = ifMatchReplaceWith (link, i, 
+              "/Forms/AllItems.aspx?RootFolder=/", 
+              "/");
+          if (j > i) {
+            int path2start = i;
+            int path2end = link.indexOf("/", j);
+            if (path2end < 0) {
+              path2end = link.length();
+            }
+            String path2 = link.substring(path2start, path2end);
+            // System.out.println ("path2 = " + path2);
+            int path1start = link.indexOf(path2);
+            if (path1start >= 0 && path1start < path2start) {
+              int path1end = path1start + path2.length();
+              while (path2end < link.length()
+                  && path1end < path2start
+                  && link.charAt(path1end) == link.charAt(path2end)) {
+                path1end++;
+                path2end++;
+              } // end while matching path characters
+              link.delete(path2start, path2end);
+            } // end if we found duplicate paths
+          } // end if we found the rootfolder string
+        } 
+        if (j == i && i < link.length()) {
+          j = ifMatchReplaceWith (link, i, 
+              "/Forms/AllItems.aspx", 
+              "/");
+        }
+        if (j == i && i < link.length()) {
+          j = ifMatchReplaceWith (link, i, "/SitePages/Home.aspx", "/");
+        }
+        if (j == i && i < link.length()) {
+          j = ifMatchReplaceWith (link, i, "/Pages/Default.aspx", "/");
+        }
+        if (j == i && i < link.length()) {
+          j = ifMatchReplaceWith (link, i,
+              "/_layouts/15/start.aspx#/",
+              "/");
+        }
+        
+        if (j == i) {
+          i++;
+        } else {
+          i = j;
+        }
+      } // end while scanning link
+    } // end if sharepoint cruft box removal desired
+    
+    // Insert a redirect, if user has so specified
+    if (insertRedirect) {
+      link.insert(0, redirectURL);
+    }
+    return link.toString();
+
+    // if (linkTweakerApp != null) {
+    //    linkTweakerApp.putTweakedLink (link.toString(), linkID);
+    // }
+  }
+  
+  
+  /**
+   If the given before string matches the next sequence of characters, then 
+   delete the matching string and everything that follows. 
+  
+   @param str    The StringBuffer to possibly be changed.
+   @param i      The current position in the StringBuffer to be examined. 
+   @param before The matching string we are looking for. 
+  
+  */
+  private static void ifMatchDeleteToEnd
+      (StringBuilder str, int i, String before) {
+    if ((i + before.length()) <= str.length()
+        && str.substring(i, i + before.length()).equals(before)) {
+      str.delete(i, str.length());
+    } 
+  }
+  
+  
+  /**
+   If the given before string matches the next sequence of characters, then 
+   replace it with the after string. 
+  
+   @param str    The StringBuffer to possibly be changed.
+   @param i      The current position in the StringBuffer to be examined. 
+   @param before The matching string we are looking for. 
+   @param after  The replacement string, if a match is found.
+  
+   @return The resulting next index position to be examined. If no replacement
+           was made, this will be equal to the i param. If a replacement was 
+           made, it will be equal to i + the length of the to string. 
+  */
+  private static int ifMatchReplaceWith 
+      (StringBuilder str, int i, String before, String after) {
+    if ((i + before.length()) <= str.length()
+        && str.substring(i, i + before.length()).equals(before)) {
+      str.delete(i, i + before.length());
+      str.insert(i, after);
+      return (i + after.length());
+    } else {
+      return i;
+    }
   }
   
   public static String pluralize(String thing, int number) {
