@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 - 2013 Herb Bowie
+ * Copyright 2004 - 2015 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public class Home {
     Creates a new instance of Home 
     
     @param programName Name of the current program (or enough of the name that 
-                       we can use it to find the program's folder.
+                       we can use it to find the program's folder).
    */
   private Home (String programName, String programVersion) {
     
@@ -181,111 +181,23 @@ public class Home {
     userPreferences = userRoot.node (getPreferencesPath());
     systemPreferences = systemRoot.node (getPreferencesPath());
     
+    
+    
     // If we are running in development, then look for 
     // the normal application folder and use that as home.
     
     if ((userDirString.toLowerCase().indexOf ("netbeans") >= 0)
         || (userDirString.toLowerCase().indexOf ("nbproj") >= 0)
         || (userDirString.toLowerCase().indexOf ("source") >= 0)
-        || (userDirString.toLowerCase().indexOf ("build") >= 0)
-        // || (userDirString.toLowerCase().indexOf (programNameLower) < 0)
-        ){
+        || (userDirString.toLowerCase().indexOf ("build") >= 0)) {
       Logger.getShared().recordEvent(
         LogEvent.NORMAL, 
         "Running in Development", 
         false);
-      File folder = new File (userDirString);
-      File next = folder;
-      displayDirectory (next);
-      
-      // Climb up the directory tree until we hit the folder containing
-      // application programs, or the apps folder within the projects
-      // folder.
-      
-      while ((folder != null)
-          && (folder.getName().toLowerCase().indexOf ("applications") < 0)
-          && (folder.getName().toLowerCase().indexOf ("program files") < 0)
-          && (folder.getName().toLowerCase().indexOf ("apps") < 0)) {
-        next = folder.getParentFile();
-        displayDirectory (next);
-        folder = next;
-        if (folder != null
-            && folder.getName().equals("projects")) {
-          File apps = new File (folder, "apps");
-          if (apps.exists()
-              && apps.isDirectory()) {
-            folder = apps;
-            next = apps;
-            displayDirectory (next);
-          } // end if apps folder found in project structure
-        } // end if we found projects folder
-      } // end while looking for an applications folder
-      
-      // Now search this directory looking for a folder containing
-      // the name of our program. 
-      
-      if (next == null) {
-        next = new File ("C:/Program Files");
-      }
-      if (! next.exists()) {
-        next = new File ("/Applications");
-      }
-      if (next != null
-          && next.exists()) {
-        displayDirectory (next);
-        File[] apps = next.listFiles();
-        int i = -1;
-        while (next != null
-            && (i + 1) < apps.length
-            && ((next.getName().toLowerCase().indexOf (programNameLower) < 0
-                && next.getName().toLowerCase().indexOf (programNameNoSpace) < 0) 
-              || (! next.isDirectory()))) {
-          i++;
-          next = apps [i];
-          // displayDirectory (next);
-        } // end while looking for program folder
-      } // end if we found the folder containing user's apps
-      
-      // Now see if we need to dive deeper
-      if (next != null
-          && next.isDirectory()) {
-        displayDirectory (next);
-        File programFolder = new File (next, "mac");
-        if (! programFolder.exists() || ! programFolder.isDirectory()) {
-          programFolder = new File (next, "execjar");
-        }
-        if (programFolder.exists()
-            && programFolder.isDirectory()) {
-          File[] macFolders = programFolder.listFiles();
-          int j = -1;
-          File nextMacFolder = programFolder;
-          while (nextMacFolder != null
-              && (j + 1) < macFolders.length
-              && ((nextMacFolder.getName().toLowerCase().indexOf (programNameLower) < 0
-                  && nextMacFolder.getName().toLowerCase().indexOf (programNameNoSpace) < 0) 
-                || (! nextMacFolder.isDirectory()))) {
-            j++;
-            nextMacFolder = macFolders [j];
-            displayDirectory (nextMacFolder);
-          } // end while looking for program folder
-          if (nextMacFolder != null
-              && nextMacFolder.exists()
-              && nextMacFolder.isDirectory()) {
-            next = nextMacFolder;
-            displayDirectory (next);
-          }
-        } // end if we found a mac folder
-      } // end if we have a directory to work with
-      
-      // If we found something, then set the appropriate folders
-      if (next != null
-          && next.isDirectory()
-          && (next.getName().toLowerCase().indexOf (programNameLower) >= 0
-              || next.getName().toLowerCase().indexOf (programNameNoSpace) >= 0)) {
-        appFolder = next;
-        prefsFolder = next;
-      }
-    } // end if we are running in development
+      File pspubDocs = new File (userHome, "PSPub Docs");
+      File jars = new File (pspubDocs, "jars");
+      appFolder = jars;
+    }
     
     // Check for a Mac application bundle
     boolean bundleFound = lookForMacAppBundleFolder (appFolder);
