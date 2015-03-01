@@ -655,7 +655,7 @@ public class Home {
     
     Logger.getShared().recordEvent
         (LogEvent.NORMAL,
-        "Home opening URL " + url + " using BrowserLauncher2" + cleaningMsg,
+        "Home opening URL " + url + cleaningMsg,
         false);
 
     if (browserAvailable) {
@@ -670,7 +670,7 @@ public class Home {
         } catch (IOException ex) {
           Logger.getShared().recordEvent
             (LogEvent.NORMAL,
-            "I/O Exception",
+            "I/O Exception with msg: " + ex.getMessage(),
             false);
         }
     } else {

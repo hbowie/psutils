@@ -114,7 +114,8 @@ public class ProgramVersion
       } 
       catch (java.io.IOException ioe) {
           log.recordEvent (LogEvent.MEDIUM, 
-              "Could not verify program version using PAD file at " + inputName,
+              "Could not verify program version using PAD file at " + inputName 
+              + " due to I/O Exception " + ioe.getMessage(),
               false);   
       } // end catch
     } // end if ok
