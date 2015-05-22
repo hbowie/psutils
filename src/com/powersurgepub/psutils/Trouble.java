@@ -97,7 +97,7 @@ public class Trouble {
         <li>PLAIN_MESSAGE
       </ul>
    */ 
-  public void report (String message, String title,  int messageType) {
+  public void report (String message, String title, int messageType) {
     report (parent, message, title, messageType);
   }
   
