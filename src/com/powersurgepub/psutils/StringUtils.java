@@ -18,7 +18,6 @@ package com.powersurgepub.psutils;
 
   import java.awt.*;
   import java.io.*;
-  import java.math.*;
   
 /**
    A utility class containing static methods to do things
@@ -1850,6 +1849,12 @@ public class StringUtils {
           && ((i + 3) < in.length())
           && (in.substring(i + 1, i + 4).equals("com"))) {
         i = i + 3; // Drop .com
+      }
+      else
+      if (c == '.'
+          && (i >= 2)
+          && in.substring(i - 2, i).equalsIgnoreCase("vs")) {
+        // Drop the period in "vs."
       }
       else
       if (c == '&') {
