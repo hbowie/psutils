@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2013 Herb Bowie
+ * Copyright 2003 - 2015 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -168,9 +168,11 @@ public class UserPrefs {
         = home.getProgramNameNoSpace() + SYSTEM_PREFS_EXPORT_NAME;
     
     // Get Preferences, if they exist
+    /* Maybe not such a good idea...
     if (home.isRunningFromDropbox()) {
       loadDropboxPrefs();
     } 
+    */
     if (userPreferences == null) {
       userPreferences = home.getUserPreferences();
     }
@@ -630,9 +632,11 @@ public class UserPrefs {
           "Preferences backing store exception " + e.toString(), false);
     }
     
+    /* Maybe not such a good idea...
     if (home.isRunningFromDropbox()) {
       saveDropboxPrefs();
     }
+    */
     if (unsavedPrefs) {
       saveAltPrefs();
     }
@@ -679,6 +683,7 @@ public class UserPrefs {
    If the program was launched from a Dropbox folder, then read the
    preferences from the program folder. 
   */
+  /* Maybe not such a good idea...
   private void loadDropboxPrefs () {
     
     System.out.println("UserPrefs.loadDropboxPrefs");
@@ -722,12 +727,14 @@ public class UserPrefs {
             "System prefs do not yet exist in Dropbox folder", false);
     }
 
-  }
+  } 
+  */
   
   /**
     If the program was launched from a Dropbox folder, then save the 
     preferences within the program folder. 
    */
+  /* Maybe not such a good idea...
   private void saveDropboxPrefs () {
     
     userPrefsDropboxName 
@@ -752,6 +759,7 @@ public class UserPrefs {
           "Trouble saving system prefs to Dropbox folder", false);
     }
   } // end method
+  */
   
   /**
     If old-style parms file is found, convert the properties to the new
