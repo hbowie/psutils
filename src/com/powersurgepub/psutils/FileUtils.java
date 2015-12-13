@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2013 Herb Bowie
+ * Copyright 1999 - 2015 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -240,6 +240,13 @@ public class FileUtils {
       }
     } // end if ok so far and folder does not exist
     return ok;
+  }
+  
+  public static boolean isGoodInputDirectory(File file) {
+    return (file != null
+        && file.exists()
+        && file.isDirectory()
+        && file.canRead());
   }
   
 }
