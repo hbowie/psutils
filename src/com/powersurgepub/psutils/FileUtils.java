@@ -249,11 +249,29 @@ public class FileUtils {
         && file.canRead());
   }
   
+  public static boolean isGoodOutputDirectory(File file) {
+    return (file != null
+        && file.exists()
+        && file.isDirectory()
+        && file.canWrite());
+  }
+  
   public static boolean isGoodInputFile(File file) {
     return (file != null
         && file.exists()
         && file.isFile()
         && file.canRead());
+  }
+  
+  public static String changeExt(String fileName, String newExt) {
+    StringBuilder name = new StringBuilder(fileName);
+    int i = name.length() - 1;
+    while (i > 0 && name.charAt(i) != '.') {
+      name.deleteCharAt(i);
+      i--;
+    }
+    name.append(newExt);
+    return name.toString();
   }
   
 }
