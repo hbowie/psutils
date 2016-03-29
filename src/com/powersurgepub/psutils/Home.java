@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 - 2015 Herb Bowie
+ * Copyright 2004 - 2016 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,6 +142,10 @@ public class Home {
         LogEvent.NORMAL, 
         "User Home = " + userHome.toString(), 
         false);
+    
+    logNormalEvent("Java Version: " + System.getProperty("java.version"));
+    logNormalEvent("Java Home: " + System.getProperty("java.home"));
+    // Find the user's primary documents folder
     userDocs = new File (userHome, MAC_DOCS);
     if (userDocs != null
         && userDocs.exists()
@@ -162,6 +166,76 @@ public class Home {
         "User Docs = " + userDocs.toString(), 
         false);
     
+    /*
+     * Compute the absolute file path to the jar file.
+     * The framework is based on http://stackoverflow.com/a/12733172/1614775
+     * But that gets it right for only one of the four cases.
+     * 
+     * @param aclass A class residing in the required jar.
+     * 
+     * @return A File object for the directory in which the jar file resides.
+     * During testing with NetBeans, the result is ./build/classes/,
+     * which is the directory containing what will be in the jar.
+     */
+    URL url;
+    String extURL;      //  url.toExternalForm();
+
+    // get an url
+    try {
+        url = Home.class.getProtectionDomain().getCodeSource().getLocation();
+          // url is in one of two forms
+          //        ./build/classes/   NetBeans test
+          //        jardir/JarName.jar  froma jar
+    } catch (SecurityException ex) {
+        url = Home.class.getResource(Home.class.getSimpleName() + ".class");
+        // url is in one of two forms, both ending "/com/physpics/tools/ui/PropNode.class"
+        //          file:/U:/Fred/java/Tools/UI/build/classes
+        //          jar:file:/U:/Fred/java/Tools/UI/dist/UI.jar!
+    }
+
+    // convert to external form
+    extURL = url.toExternalForm();
+
+    // prune for various cases
+    if (extURL.endsWith(".jar"))   // from getCodeSource
+        extURL = extURL.substring(0, extURL.lastIndexOf("/"));
+    else {  // from getResource
+        String suffix = "/"+(Home.class.getName()).replace(".", "/")+".class";
+        extURL = extURL.replace(suffix, "");
+        if (extURL.startsWith("jar:") && extURL.endsWith(".jar!"))
+            extURL = extURL.substring(4, extURL.lastIndexOf("/"));
+    }
+
+    // convert back to url
+    try {
+        url = new URL(extURL);
+    } catch (MalformedURLException mux) {
+        // leave url unchanged; probably does not happen
+    }
+
+    // convert url to File
+    File jarFile;
+    try {
+        jarFile = new File(url.toURI());
+    } catch(URISyntaxException ex) {
+        jarFile = new File(url.getPath());
+    }
+    Logger.getShared().recordEvent(
+        LogEvent.NORMAL, 
+        "Home jar file = " + jarFile.toString(), 
+        false);
+    
+    File mainExecFolder = jarFile;
+    
+    if (jarFile.getName().equalsIgnoreCase("lib")) {
+      mainExecFolder = jarFile.getParentFile();
+    }
+    
+    Logger.getShared().recordEvent(
+        LogEvent.NORMAL,
+        "Main Exec Folder = " + mainExecFolder.toString(),
+        false);
+    
     if (userDirString.indexOf("/Dropbox") >= 0) {
       runningFromDropbox = true;
     } else {
@@ -174,18 +248,16 @@ public class Home {
     
     programDefaultDataFolder = new File (userDocs, this.programName);
     
-    
     // Get nodes for Preferences
     userRoot = Preferences.userRoot();
     systemRoot = Preferences.systemRoot();
     userPreferences = userRoot.node (getPreferencesPath());
     systemPreferences = systemRoot.node (getPreferencesPath());
     
-    
-    
     // If we are running in development, then look for 
     // the normal application folder and use that as home.
-    
+    boolean bundleFound = false;
+    File bundleFile = null;
     if ((userDirString.toLowerCase().indexOf ("netbeans") >= 0)
         || (userDirString.toLowerCase().indexOf ("nbproj") >= 0)
         || (userDirString.toLowerCase().indexOf ("source") >= 0)
@@ -197,17 +269,36 @@ public class Home {
       File pspubDocs = new File (userHome, "PSPub Docs");
       File jars = new File (pspubDocs, "jars");
       appFolder = jars;
-    }
-    
-    // Check for a Mac application bundle
-    boolean bundleFound = lookForMacAppBundleFolder (appFolder);
-    if (! bundleFound) {
-      bundleFound = lookForMacAppBundleFolder 
-          (new File (appFolder, programNameNoSpace + ".app"));
-    }
-    if (! bundleFound) {
-      bundleFound = lookForMacAppBundleFolder
-          (new File (appFolder, programName + ".app"));
+    } else {
+      Logger.getShared().recordEvent(LogEvent.NORMAL, 
+          "Main Exec Folder name = " + mainExecFolder.getName(), false);
+      if (mainExecFolder.getName().equals("Java")) {
+        File contentsFolder = mainExecFolder.getParentFile();
+        Logger.getShared().recordEvent(LogEvent.NORMAL, 
+            "Contents Folder name = " + contentsFolder.getName(), false);
+        if (contentsFolder.getName().equals("Contents")) {
+          bundleFile = contentsFolder.getParentFile();
+          File resourcesFolder = new File (contentsFolder, "Resources");
+          File tryAppFolder = new File (resourcesFolder, "appfolder");
+          Logger.getShared().recordEvent(LogEvent.NORMAL, 
+              "Pontential App Folder = " + tryAppFolder.toString(), false);
+          Logger.getShared().recordEvent(LogEvent.NORMAL, 
+              "Pontential App Folder exists? " + String.valueOf(tryAppFolder.exists()), false);
+          Logger.getShared().recordEvent(LogEvent.NORMAL, 
+              "Pontential App Folder can be read? " + String.valueOf(tryAppFolder.canRead()), false);
+          if (tryAppFolder.exists() && tryAppFolder.canRead()) {
+            appFolder = tryAppFolder;
+            bundleFound = true;
+            Logger.getShared().recordEvent(
+                LogEvent.NORMAL, 
+                "Mac App Bundle? " 
+                  + String.valueOf(bundleFound) 
+                  + " - " 
+                  + bundleFile.toString(), 
+                false);
+          }
+        }
+      }
     }
 
     // Create the image icon if we can find the icon file
@@ -264,27 +355,6 @@ public class Home {
     }
     
   } // end constructor
-  
-  private boolean lookForMacAppBundleFolder (File folder) {
-    boolean itworked = false;
-    if (xos.isRunningOnMacOS() && folder != null) {
-      File macAppBundleFolder = new File (folder, 
-          "Contents/Resources/appfolder");
-      if (macAppBundleFolder != null
-          && macAppBundleFolder.exists()) {
-        appFolder = macAppBundleFolder;
-        itworked = true;
-      } // end if appfolder found with Mac app bundle
-    } // end if we're running on a Mac and have a folder to work with
-    Logger.getShared().recordEvent(
-        LogEvent.NORMAL, 
-        "Mac App Bundle? " 
-          + String.valueOf(itworked) 
-          + " - " 
-          + folder.toString(), 
-        false);
-    return itworked;
-  } // end method
   
   private void displayDirectory (File dir) {
     if (dir != null) {
@@ -687,6 +757,15 @@ public class Home {
     
     return ok;
 
+  }
+  
+  /**
+   Log a normal event. 
+  
+   @param message The message to be written to the log. 
+  */
+  public void logNormalEvent(String message) {
+    Logger.getShared().recordEvent(LogEvent.NORMAL, message, false);
   }
   
   /**
