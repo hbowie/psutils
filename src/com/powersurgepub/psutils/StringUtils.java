@@ -1290,7 +1290,9 @@ public class StringUtils {
    @param inString String to be reduced to its lowest common denominator. 
   
    @return The lowest common denominator of the string. If the string starts
-           with the words "a", "an" or "the", remove them. 
+           with the words "a", "an" or "the", remove them. Only letters and 
+           digits are included, and letters are all made lower case. White space
+           and punctuation characters are dropped. 
    */
   public static String commonName (String inString) {
     StringBuilder s = new StringBuilder ();
