@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2014 Herb Bowie
+ * Copyright 1999 - 2016 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -563,12 +563,67 @@ public class FileName {
   }
   
   /**
+   Return the length of the file name as it was originally input. 
+  
+   @return The length of the file name as it was originally input. 
+  */
+  public int length() {
+    return fileNameIn.length();
+  }
+  
+  /**
      Returns the file name that was input, without modification.
     
      @return  original file name
    */
   public String toString () {
     return fileNameIn;
+  }
+  
+  /**
+   Return the character found at the designated index location. 
+  
+   @param i The index location, with the first character at index 0.
+  
+   @return The character found at the designated index location. 
+  */
+  public char charAt(int i) {
+    return fileNameIn.charAt(i);
+  }
+  
+  /**
+   Does the full file name input start with the given string? 
+   
+   @param start The string to be tested. 
+  
+   @return True if it does start with it; false otherwise. 
+  */
+  public boolean startsWith(String start) {
+    return fileNameIn.startsWith(start);
+  }
+  
+  /**
+   Return a substring of the original file name. 
+  
+   @param start The starting position of the substring to be returned. 
+   @param end   The ending position of the substring to be returned. 
+  
+   @return The desired substring. 
+  */
+  public String substring (int start, int end) {
+    return fileNameIn.substring(start, end);
+  }
+  
+  
+  /**
+   Return the specified substring.
+  
+   @param start The starting position. 
+  
+   @return The requested substring. 
+  */
+  public String substring (int start) {
+    return fileNameIn.substring(start);
   }
   
   /**
