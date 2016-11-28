@@ -149,6 +149,10 @@ public class StringConverter {
   
   public static final String GREATER_THAN_MARKUP = "&gt;";
   
+  public static final String ELLIPSIS_MARKUP = "&hellip;";
+  
+  public static final String ELLIPSIS = "...";
+  
   
   
   private ArrayList list = new ArrayList();
@@ -233,6 +237,7 @@ public class StringConverter {
     add (AMPERSAND,    AMPERSAND_MARKUP);
     add (LESS_THAN,    LESS_THAN_MARKUP);
     add (GREATER_THAN, GREATER_THAN_MARKUP);
+    add (ELLIPSIS_MARKUP, ELLIPSIS);
   }
 
   
