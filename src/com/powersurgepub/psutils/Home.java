@@ -317,6 +317,15 @@ public class Home {
     } else {
       System.out.println ("Icon file not found at " + iconFile.toString());
     }
+    if (icon == null) {
+      Logger.getShared().recordEvent(LogEvent.MEDIUM, 
+          "The icon file could not be found at " + iconFile.toString(), 
+          false);
+    } else {
+      Logger.getShared().recordEvent(LogEvent.NORMAL, 
+          "Icon file loaded from " + iconFile.toString(), 
+          false);
+    }
     
     // Create a URL pointing to the applications folder
     if (appFolder == null) {
