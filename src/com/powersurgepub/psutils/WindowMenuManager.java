@@ -71,7 +71,7 @@ public class WindowMenuManager {
   }
 
   private WindowMenuManager () {
-    
+
   }
 
   /**
@@ -129,8 +129,19 @@ public class WindowMenuManager {
     
     if (! found) {
       menus.add(windowMenu);
-    }
-  }
+      for (WindowToManage windowInList : windows) {
+        JMenuItem menuItem = new JMenuItem(windowInList.getTitle());
+        menuItem.setActionCommand (windowInList.getTitle());
+        menuItem.setToolTipText (windowInList.getTitle());
+        menuItem.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            windowMenuItemActionPerformed(evt);
+          }
+        });
+        windowMenu.add(menuItem);
+      } // end for each window already being managed
+    } // end if menu needs to be added
+  } // end method addWindowMenu
   
   /**
    Add a new WindowToManage to the Window menu. It will be visible on the menu,
@@ -164,101 +175,6 @@ public class WindowMenuManager {
     return i;
   }
   
-  /**
-   Nest the passed window in the upper left corner of the passed 
-   reference component, and make sure it is visible. 
-  
-   @param refComponent The reference component used to locate the passed window.
-   @param window       The window to act upon. 
-  */
-  public void locateUpperLeftAndMakeVisible 
-      (Component refComponent, WindowToManage window) {
-    
-    locateUpperLeft(refComponent, window);
-    makeVisible (window);
-  }
-  
-  /**
-   Nest the passed window in the upper left corner of the passed reference
-   component. 
-  
-   @param refComponent The reference component used to locate the passed window.
-   @param window       The window to act upon. 
-  */
-  public static void locateUpperLeft 
-      (Component refComponent, WindowToManage window) {
-    
-    window.setLocation (
-			refComponent.getX() + CHILD_WINDOW_X_OFFSET, 
-			refComponent.getY() + CHILD_WINDOW_Y_OFFSET);
-  }
-  
-  /**
-   Locate the passed window in the center of the passed reference component
-   and make sure it is visible. 
-   
-   @param refComponent The reference component used to locate the passed window.
-   @param window       The window to act upon.  
-  */
-  public void locateCenterAndMakeVisible
-      (Component refComponent, WindowToManage window) {
-    
-    locateCenter (refComponent, window);
-    makeVisible (window);
-  }
-  
-  /**
-   Locate the passed window in the center of the passed reference component. 
-  
-   @param refComponent The reference component used to locate the passed window.
-   @param window       The window to act upon. 
-  */
-  public static void locateCenter (Component refComponent, WindowToManage window) {
-    int w = refComponent.getWidth();
-	  int h = refComponent.getHeight();
-	  int x = refComponent.getX();
-	  int y = refComponent.getY();
-	  window.setLocation(
-	      x + ((w - window.getWidth()) / 2),
-	      y + ((h - window.getHeight()) / 2));
-  }
-
-  /**
-   Add a new WindowToManage to the Window menu, and 
-   bring the window to the front.
-
-   @param window The window to be made visible. 
-   */
-  public void makeVisible(WindowToManage window) {
-    int i = getIndexOf(window);
-    if (i < 0) {
-      i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
-    }
-    showWindow (window);
-  }
-
-  /**
-   Hide the passed window and remove it from the Window menu.
-
-   @param window The window to be hidden. 
-   */
-  public void hide(WindowToManage window) {
-    int i = getIndexOf(window);
-    if (i >= 0) {
-      for (JMenu menuInList : menus) {
-        if (i < menuInList.getItemCount()) {
-          menuInList.remove(i);
-        } else {
-          System.out.println ("Trying to remove menu item " + String.valueOf(i) +
-              " from menu of " + String.valueOf(menuInList.getItemCount()) +
-              " items");
-        }
-      }
-      windows.remove(i);
-    }
-    window.setVisible(false);
-  }
-
   /**
    Add new window to the end of the list of menus. 
   
@@ -348,6 +264,119 @@ public class WindowMenuManager {
       return null;
     } else {
       return windows.get(i);
+    }
+  }
+  
+  /**
+   Nest the passed window in the upper left corner of the passed 
+   reference component, and make sure it is visible. 
+  
+   @param refComponent The reference component used to locate the passed window.
+   @param window       The window to act upon. 
+  */
+  public void locateUpperLeftAndMakeVisible 
+      (Component refComponent, WindowToManage window) {
+    
+    locateUpperLeft(refComponent, window);
+    makeVisible (window);
+  }
+  
+  /**
+   Nest the passed window in the upper left corner of the passed reference
+   component. 
+  
+   @param refComponent The reference component used to locate the passed window.
+   @param window       The window to act upon. 
+  */
+  public static void locateUpperLeft 
+      (Component refComponent, WindowToManage window) {
+    
+    window.setLocation (
+			refComponent.getX() + CHILD_WINDOW_X_OFFSET, 
+			refComponent.getY() + CHILD_WINDOW_Y_OFFSET);
+  }
+  
+  /**
+   Locate the passed window in the center of the passed reference component
+   and make sure it is visible. 
+   
+   @param refComponent The reference component used to locate the passed window.
+   @param window       The window to act upon.  
+  */
+  public void locateCenterAndMakeVisible
+      (Component refComponent, WindowToManage window) {
+    
+    locateCenter (refComponent, window);
+    makeVisible (window);
+  }
+  
+  /**
+   Locate the passed window in the center of the passed reference component. 
+  
+   @param refComponent The reference component used to locate the passed window.
+   @param window       The window to act upon. 
+  */
+  public static void locateCenter (Component refComponent, WindowToManage window) {
+    int w = refComponent.getWidth();
+	  int h = refComponent.getHeight();
+	  int x = refComponent.getX();
+	  int y = refComponent.getY();
+	  window.setLocation(
+	      x + ((w - window.getWidth()) / 2),
+	      y + ((h - window.getHeight()) / 2));
+  }
+
+  /**
+   Add a new WindowToManage to the Window menu, and 
+   bring the window to the front.
+
+   @param window The window to be made visible. 
+   */
+  public void makeVisible(WindowToManage window) {
+    int i = getIndexOf(window);
+    if (i < 0) {
+      i = addAtEnd(window, KeyEvent.VK_UNDEFINED);
+    }
+    showWindow (window);
+  }
+
+  /**
+   Hide the passed window and remove it from the Window menu.
+
+   @param window The window to be hidden. 
+   */
+  public void hideAndRemove(WindowToManage window) {
+    remove(window);
+    hide(window);
+  }
+  
+  /**
+   Hide the passed window and remove it from the Window menu.
+
+   @param window The window to be hidden. 
+   */
+  public void hide(WindowToManage window) {
+    window.setVisible(false);
+  }
+  
+  /**
+   Hide the passed window and remove it from the Window menu.
+
+   @param window The window to be hidden. 
+   */
+  public void remove(WindowToManage window) {
+    int i = getIndexOf(window);
+    if (i >= 0) {
+      for (JMenu menuInList : menus) {
+        if (i < menuInList.getItemCount()) {
+          menuInList.remove(i);
+        } else {
+          System.out.println ("Trying to remove menu item " + String.valueOf(i) +
+              " from menu of " + String.valueOf(menuInList.getItemCount()) +
+              " items");
+        }
+      }
+      windows.remove(i);
     }
   }
 
