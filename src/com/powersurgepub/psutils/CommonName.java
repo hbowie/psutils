@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2014 Herb Bowie
+ * Copyright 1999 - 2017 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,6 +89,10 @@ public class CommonName {
   public boolean equals (CommonName another) {
     return commonForm.equals (another.getCommonForm());
   }
+  
+  public boolean equals (String another) {
+    return (commonForm.equalsIgnoreCase(another));
+  }
 
   /**
      Compares this common name to another one.
@@ -101,6 +105,10 @@ public class CommonName {
    */
   public int compareTo (CommonName another) {
     return commonForm.compareTo (another.getCommonForm());
+  }
+  
+  public boolean contains (String fragment) {
+    return commonForm.contains(fragment.toLowerCase());
   }
 
   /**
