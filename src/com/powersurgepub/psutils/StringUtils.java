@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 - 2016 Herb Bowie
+ * Copyright 1999 - 2017 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -611,12 +611,21 @@ public class StringUtils {
   }
   
   public static String colorToHexString (Color color) {
-    int red = color.getRed();
-    int green = color.getGreen();
-    int blue = color.getBlue();
-    return (oneColorToHexString(red) 
-        + oneColorToHexString(green)
-        + oneColorToHexString(blue));
+    if (color == null) {
+      int red = Color.WHITE.getRed();
+      int green = Color.WHITE.getGreen();
+      int blue = Color.WHITE.getBlue();
+      return (oneColorToHexString(red) 
+          + oneColorToHexString(green)
+          + oneColorToHexString(blue));
+    } else {
+      int red = color.getRed();
+      int green = color.getGreen();
+      int blue = color.getBlue();
+      return (oneColorToHexString(red) 
+          + oneColorToHexString(green)
+          + oneColorToHexString(blue));
+    }
   }
   
   public static Color hexStringToColor (String color) {
