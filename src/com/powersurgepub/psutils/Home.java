@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 - 2016 Herb Bowie
+ * Copyright 2004 - 2017 Herb Bowie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -680,7 +680,10 @@ public class Home {
    @return True if everything seemed to go OK. 
   */
   public boolean openURL (URL url) {
-    boolean ok = openURL (url.toString());
+    boolean ok = false;
+    if (url != null) {
+      ok = openURL (url.toString());
+    }
     return ok;
   }
   
