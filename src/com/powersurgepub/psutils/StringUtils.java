@@ -18,6 +18,7 @@ package com.powersurgepub.psutils;
 
   import java.awt.*;
   import java.io.*;
+  import java.net.*;
   
 /**
    A utility class containing static methods to do things
@@ -219,6 +220,23 @@ public class StringUtils {
 
   private StringUtils () {
     super ();
+  }
+  
+  /**
+   Take a file and return a URL pointing to that file. 
+  
+   @param file The file to be used. 
+   @return The URL pointing to the file.
+  */
+  public static String fileToLink(File file) {
+    String tweaked = "";
+    try {
+      String webPage = file.toURI().toURL().toString();
+      tweaked = StringUtils.tweakAnyLink(webPage, false, false, false, "");
+    } catch (MalformedURLException e) {
+      tweaked = "file://///" + file.getAbsolutePath();
+    }
+    return tweaked;
   }
   
   /**
@@ -1891,7 +1909,8 @@ public class StringUtils {
       i++;
     } // end for each character in input string
     if (out.length() > 0) {
-      if (out.charAt (out.length() - 1) == FILE_NAME_WORD_SEPARATOR) {
+      if (out.charAt (out.length() - 1) == FILE_NAME_WORD_SEPARATOR
+          || out.charAt (out.length() - 1) == ' ') {
         out.deleteCharAt (out.length() - 1);
       }
     }
