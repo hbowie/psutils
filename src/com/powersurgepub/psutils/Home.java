@@ -43,6 +43,8 @@ public class Home {
   private static final String MAC_DOCS                    = "Documents";
   private static final String WINDOWS_DOCS                = "My Documents";
   
+  private static final String APP_FOLDER                  = "appfolder";
+  
   private String              userName;
   private String              userDirString;
   private String              programName = "";  
@@ -226,6 +228,8 @@ public class Home {
         false);
     
     File mainExecFolder = jarFile;
+    File resourcesFolder = null;
+    File bundleFile = null;
     
     if (jarFile.getName().equalsIgnoreCase("lib")) {
       mainExecFolder = jarFile.getParentFile();
@@ -257,7 +261,6 @@ public class Home {
     // If we are running in development, then look for 
     // the normal application folder and use that as home.
     boolean bundleFound = false;
-    File bundleFile = null;
     if ((userDirString.toLowerCase().indexOf ("netbeans") >= 0)
         || (userDirString.toLowerCase().indexOf ("nbproj") >= 0)
         || (userDirString.toLowerCase().indexOf ("source") >= 0)
@@ -276,30 +279,26 @@ public class Home {
         File contentsFolder = mainExecFolder.getParentFile();
         Logger.getShared().recordEvent(LogEvent.NORMAL, 
             "Contents Folder name = " + contentsFolder.getName(), false);
+        File javaAppFolder = new File (mainExecFolder, APP_FOLDER);
+        boolean appFolderFound = tryAppFolder(javaAppFolder);
+
         if (contentsFolder.getName().equals("Contents")) {
           bundleFile = contentsFolder.getParentFile();
-          File resourcesFolder = new File (contentsFolder, "Resources");
-          File tryAppFolder = new File (resourcesFolder, "appfolder");
-          Logger.getShared().recordEvent(LogEvent.NORMAL, 
-              "Pontential App Folder = " + tryAppFolder.toString(), false);
-          Logger.getShared().recordEvent(LogEvent.NORMAL, 
-              "Pontential App Folder exists? " + String.valueOf(tryAppFolder.exists()), false);
-          Logger.getShared().recordEvent(LogEvent.NORMAL, 
-              "Pontential App Folder can be read? " + String.valueOf(tryAppFolder.canRead()), false);
-          if (tryAppFolder.exists() && tryAppFolder.canRead()) {
-            appFolder = tryAppFolder;
-            bundleFound = true;
-            Logger.getShared().recordEvent(
-                LogEvent.NORMAL, 
-                "Mac App Bundle? " 
-                  + String.valueOf(bundleFound) 
-                  + " - " 
-                  + bundleFile.toString(), 
-                false);
-          }
+          resourcesFolder = new File (contentsFolder, "Resources");
         }
-      }
-    }
+        
+        if (! appFolderFound
+            && resourcesFolder != null) {
+          File resourcesAppFolder = new File (resourcesFolder, APP_FOLDER);
+          appFolderFound = tryAppFolder(resourcesAppFolder);
+        }
+        if (! appFolderFound) {
+          Logger.getShared().recordEvent(LogEvent.MEDIUM, 
+              "appfolder missing -- resource files will not be available", 
+              false);
+        } /// end if no appfolder
+      } // end if we have a Java folder
+    } // end if looking for appfolder as part of app bundle
 
     // Create the image icon if we can find the icon file
     icon = null;
@@ -364,6 +363,30 @@ public class Home {
     }
     
   } // end constructor
+  
+  /**
+   See if we've found the appfolder containing application resources. 
+  
+   @param  folderToTry The folder to assess.
+  
+   @return True if it looks good. 
+  */
+  private boolean tryAppFolder(File folderToTry) {
+    boolean goodAppFolder = false;
+    if (folderToTry.getName().equals(APP_FOLDER)
+        && folderToTry.exists() 
+        && folderToTry.isDirectory()
+        && folderToTry.canRead()) {
+      appFolder = folderToTry;
+      goodAppFolder = true;
+      Logger.getShared().recordEvent(
+          LogEvent.NORMAL, 
+          "App Folder found at " 
+              + folderToTry.toString(), 
+          false);
+    }
+    return goodAppFolder;
+  }
   
   private void displayDirectory (File dir) {
     if (dir != null) {
